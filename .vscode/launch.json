@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DdsApplication<dds>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.dds.DdsApplication",
+            "projectName": "dds",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

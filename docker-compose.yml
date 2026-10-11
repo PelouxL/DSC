@@ -1,0 +1,50 @@
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/usr/share/nginx/html
+
+  api:
+    build: ./backend 
+    container_name: fahst-api
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/fahst_db?useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=dev
+      - SPRING_DATASOURCE_PASSWORD=dev
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: fahst-mysql 
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root 
+      MYSQL_DATABASE: fahst_db
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql 
+      - ./init-db:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: fahst-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
