@@ -6,9 +6,8 @@ services:
     volumes:
       - ./:/usr/share/nginx/html
 
-
   api:
-    build: ./backend # Mets ici le nom exact du dossier généré par VS Code (demo, backend...)
+    build: ./backend 
     container_name: fahst-api
     restart: unless-stopped
     ports:
@@ -33,6 +32,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql 
+      - ./init-db:/docker-entrypoint-initdb.d
 
   phpmyadmin:
     image: phpmyadmin:latest
