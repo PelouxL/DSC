@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Étape 1 : Construction avec Maven et Eclipse Temurin (Java 21)
 FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
@@ -10,4 +11,18 @@ FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
+=======
+# Étape 1 : Construction avec Maven et Eclipse Temurin (Java 21)
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Étape 2 : Lancement de l'application
+FROM eclipse-temurin:21-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+>>>>>>> 471823f3a6abf09aafcb5349d70e5aa06d5c7441
 ENTRYPOINT ["java", "-jar", "app.jar"]
