@@ -1,0 +1,24 @@
+.barre-recherche {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: #f3f4f6;
+    padding: 15px;
+    border-radius: 50px;
+}
+
+.bloc-dates {
+    display: flex;
+    gap: 15px;
+}
+
+.champ-saisie {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-navigation ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}

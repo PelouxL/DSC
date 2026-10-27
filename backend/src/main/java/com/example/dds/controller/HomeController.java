@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller 
 public class HomeController {
     
-    @GetMapping("/accueil")
+    @GetMapping("/")
     public String afficherAcceuil(Model m) {
         
-        m.addAttribute("titre", "Bienvenue sur mon premier site zbi DamienS");
+        m.addAttribute("titre", "AlloFraicheur");
         
-        return "accueil";
+        return "index";
     }
     
 }

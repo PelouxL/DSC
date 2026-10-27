@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlloFraicheur</title>
+    <link rel="stylesheet" th:href="@{/index.css}">
+</head>
+<body>
+    <h1 th:text="${titre}">Titre par défaut</h1>
+    <nav class="menu-navigation">
+        <ul>
+            <li><a th:href="@{/}">Accueil</a></li>
+            <li><a th:href="@{/info}">A propos</a></li>
+            <li><a th:href="@{/creeLogement}">Ajouté un logement</a></li>
+            <li><a th:href="@{/formConnexion}">Se connecté</a></li>
+            <li><a th:href="@{/inscription}">inscription</a></li>
+        </ul>
+    </nav>
+
+    <form th:action="@{/rechercher}" method="GET" class="barre-recherche">
+        <div class="bloc-dates">
+            <div class="champ-saisie">
+                <label for="date-debut">Arrivé</label>
+                <input type="date" id="date-debut" name="dateDebut" required>
+            </div>
+            <div class="champ-saisie">
+                <label for="date-fin">Départ</label>
+                <input type="date" id="date-fin" name="dateFin" required>
+            </div>
+        </div>
+
+        <div class="champ-saisie">
+            <label for="voyageurs">Voyageurs</label>
+            <input type="number" id="voyageurs" name="voyageurs" min="1" value="1" required>
+        </div>
+        <button>Rechercher</recherche>
+    </form>
+    
+    
+    
+
+</body>
+</html>
