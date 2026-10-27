@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Profil du propriétaire</title>
+        <style>
+            body { font-family: sans-serif; text-align: center; padding: 50px; }
+            h1 { color: #0078D4; }
+        </style>
+    </head>
+    <body>
+        <main vocab="https://schema.org/" typeof="Person">
+
+            <h1 property="name" th:text="${proprietaire.prenom + ' ' + proprietaire.nom}">
+                Nom du propriétaire
+            </h1>
+
+            <p>
+                Téléphone :
+                <span property="telephone">
+                    <a th:href="'tel:' + ${proprietaire.telephone}" th:text="${proprietaire.telephone}">
+                        Numéro de téléphone
+                    </a>
+                </span>
+            </p>
+
+            <p>
+                Note :
+                <span th:text="${proprietaire.note}">4.5</span>
+                / 5
+            </p>
+
+            <section property="address" typeof="PostalAddress">
+                <h2>Adresse</h2>
+                <p property="streetAddress" th:text="${proprietaire.numero + ' ' + proprietaire.voie}">
+                    Numéro et voie
+                </p>
+                <p>
+                    <span property="postalCode" th:text="${proprietaire.codePostal}">
+                        Code postal
+                    </span>
+                    <span property="addressLocality" th:text="${proprietaire.ville}">
+                        Ville
+                    </span>
+                </p>
+            </section>
+
+        </main>
+    </body>
+</html>
