@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit to JSON</title>
+    <link rel="stylesheet" th:href="@{/creeLogement.css}">
+</head>
+<body>
+    <header>
+        <h1>Edit To Json</h1>
+        <p> Ici nous appelons une LLM pour reccuperer les infos et les tranfmettre en JSON</p>
+    </header>
+    
+    <main>
+        <h2>Veuillez saisir les information de votre logement : </h2>
+        <form th:action="@{/ajouter-logement}" method="POST">
+            <label for="desc">Décrivez votre logement :</label>
+            <textarea id="desc" name="description" rows="5" required></textarea>
+    
+            <button type="submit">Analyser et Ajouter</button>
+        </form>
+    
+    </main>
+    
+    <div id="resultat"></div>
+    <footer>
+        <p>Merci</p>
+    </footer>
+</body>
+</html>
