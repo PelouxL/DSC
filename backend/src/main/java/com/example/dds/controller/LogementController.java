@@ -23,12 +23,10 @@ public class LogementController {
     @PostMapping("/ajouter-logement")
     public String traiterNouveauLogement(@RequestParam("description") String description) {
         
-        // Appel à l'API
         String jsonResultat = llmService.analyserLogementViaPython(description);
         
         System.out.println("Réponse de Flask et de l'IA : " + jsonResultat);
         
-        // Retourne à l'accueil une fois terminé
         return "redirect:/";
     }
 }

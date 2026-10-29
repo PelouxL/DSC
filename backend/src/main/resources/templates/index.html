@@ -4,15 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AlloFraicheur</title>
-    <link rel="stylesheet" th:href="@{/index.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
 </head>
 <body>
-    <div th:if="${session.utilisateur != null}">
-        <p>tes connecté bg</p>
-    </div>
-    <div th:if="${session.utilisateur == null}">
-        <p>tu n'es pas co bg</p>
-    </div>
     <h1 th:text="${titre}">Titre par défaut</h1>
     <nav class="menu-navigation">
         <ul>
@@ -20,13 +14,15 @@
             <li><a th:href="@{/info}">A propos</a></li>
             <li><a th:href="@{/creeLogement}">Ajouté un logement</a></li>
             
-            <li><a th:href="@{/formInscription}">inscription</a></li>
-            <div th:if="${session.utilisateur != null}">
-                <li><a th:href="@{/deconnection}">déconnection</a></li>
-            </div>
-            <div th:if="${session.utilisateur == null}">
+            <th:block th:if="${utilisateur != null}">
+                <form th:action="@{/logout}" method="POST" style="display: inline;">
+                    <button type="submit" style="background: none; border: none; color: black; cursor: pointer; font: inherit;">Déconnexion</button>
+                </form>
+            </th:block>
+            <th:block th:if="${utilisateur == null}">
+                <li><a th:href="@{/formInscription}">inscription</a></li>
                 <li><a th:href="@{/formConnexion}">Se connecté</a></li>
-            </div>
+            </th:block>
         </ul>
     </nav>
 

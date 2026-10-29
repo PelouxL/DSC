@@ -2,7 +2,10 @@ package com.example.dds.controller;
 
 import java.math.BigDecimal;
 
+import org.hibernate.annotations.Collate;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +32,7 @@ public class Adherent {
 
     String telephone;
 
+    @Column(nullable = false, unique = true)
     String email;
 
     String mdp;

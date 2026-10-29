@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription</title>
-    <link rel="stylesheet" th:href="@{/Inscription.css}">
+    <link rel="stylesheet" th:href="@{/css/Inscription.css}">
 </head>
 <body>
+    <a th:href="@{/}">Accueil</a>
     <h1> Création de votre compte.</h1>
+    <div th:if="${error}" th:text="${error}" style="background: darkred; color:white; text-align: center; font-size: 30px; padding: 1em;"></div>
     <form th:action="@{/formInscription}" method="POST" class="form-inscription">
         <h2>Vos information personnelles</h2>
         <div>
@@ -24,7 +26,7 @@
         </div>
         <div>
             <label for="email">email</label>
-            <input type="eemail" id="email" name="email" required>
+            <input type="email" id="email" name="email" required>
         </div>
         <div>
             <label for="mdp">mot de passe</label>

@@ -11,7 +11,8 @@ public interface AdherentRepository extends CrudRepository<Adherent, Long> {
     
     @Override 
     List<Adherent> findAll();
-
     Optional<Adherent> findByEmail(String email);
+
+    Boolean existsByEmail(String email);
 
 }
