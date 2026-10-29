@@ -55,7 +55,7 @@ public class AdherentController {
             }
         }
 
-        model.addAttribute("erreur", "Email ou mot de passe incorrect.");
+        model.addAttribute("error", "Email ou mot de passe incorrect.");
         return "connexion";
     }
     

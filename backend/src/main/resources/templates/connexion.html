@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription</title>
-    <link rel="stylesheet" th:href="@{/Inscription.css}">
+    <title>Connexion</title>
+    <link rel="stylesheet" th:href="@{/connexion.css}">
 </head>
 <body>
+    <header>
+        <a th:href="@{/}">Acceuil</a>
+    </header>
     <h1> Connexion de votre compte.</h1>
     <div th:if="${error}" th:text="${error}" style="background: darkred; color:white; text-align: center; font-size: 30px; padding: 1em;"></div>
     
