@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <link rel="stylesheet" th:href="@{/Inscription.css}">
+</head>
+<body>
+    <h1> Création de votre compte.</h1>
+    <form th:action="@{/formInscription}" method="POST" class="form-inscription">
+        <h2>Vos information personnelles</h2>
+        <div>
+            <label for="prenom">Prenom</label>
+            <input type="text" id="prenom" name="prenom" required>
+        </div>
+        <div>
+            <label for="nom">nom</label>
+            <input type="text" id="nom" name="nom" required>
+        </div>
+        <div>
+            <label for="telephone">telephone</label>
+            <input type="text" id="telephone" name="telephone" required>
+        </div>
+        <div>
+            <label for="email">email</label>
+            <input type="eemail" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="mdp">mot de passe</label>
+            <input type="password" id="mdp" name="mdp" required>
+        </div>
+
+        <h2>Adresse de facturation</h2>
+        <div>
+            <label for="numero">numero</label>
+            <input type="number" id="numero" name="adresse.numero" required/>
+        </div>
+        <div>
+            <label for="voie">voie</label>
+            <input type="text" id="voie" name="adresse.voie" required/>
+        </div>
+        <div>
+            <label for="codePostal">codePostal</label>
+            <input type="text" id="codePostal" name="adresse.codePostal" required/>
+        </div>
+        <div>
+            <label for="ville">ville</label>
+            <input type="text" id="ville" name="adresse.ville" required/>
+        </div>
+
+        <button type="submit">S'inscrire</button>
+    </form> 
+</body>
+</html>

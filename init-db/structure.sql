@@ -1,6 +1,6 @@
 
 CREATE TABLE adresse (
-    id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     numero INT NOT NULL,
     voie VARCHAR(255) NOT NULL,
     code_postal VARCHAR(255) NOT NULL,
@@ -13,12 +13,14 @@ CREATE TABLE secteur (
 );
 
 CREATE TABLE adherent (
-    id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     adresse_id INT NOT NULL,
     prenom VARCHAR(255) NOT NULL,
     nom VARCHAR(255) NOT NULL,
     telephone VARCHAR(255) UNIQUE NOT NULL,
-    note DECIMAL NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    mdp VARCHAR(255) NOT NULL,
+    note DECIMAL(3,1),
     FOREIGN KEY (adresse_id) REFERENCES adresse(id)
 );
 

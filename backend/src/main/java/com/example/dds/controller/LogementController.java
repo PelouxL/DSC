@@ -23,7 +23,7 @@ public class LogementController {
     @PostMapping("/ajouter-logement")
     public String traiterNouveauLogement(@RequestParam("description") String description) {
         
-        // Appel à ton API Python Dockerisée
+        // Appel à l'API
         String jsonResultat = llmService.analyserLogementViaPython(description);
         
         System.out.println("Réponse de Flask et de l'IA : " + jsonResultat);

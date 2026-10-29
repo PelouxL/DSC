@@ -14,7 +14,7 @@ public class LlmService {
 
     public String analyserLogementViaPython(String description) {
         RestTemplate restTemplate = new RestTemplate();
-        // L'adresse de ton conteneur Docker Python exposée sur ton PC
+
         String url = "http://localhost:5000/traitement";
 
         // 1. Préparer les données au format attendu par Flask : {"texte": "..."}
@@ -25,7 +25,6 @@ public class LlmService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // 3. Assembler le tout
         HttpEntity<Map<String, String>> request = new HttpEntity<>(requestBody, headers);
 
         try {
