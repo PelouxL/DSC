@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Ma première page</title>
-        <style>
-            body { font-family: sans-serif; text-align: center; padding: 50px; }
-            h1 { color: #0078D4; }
-        </style>
-    </head>
-    <body>
-        <h1 th:text="${titre}">Titre par défaut</h1>
-        
-        <p>le controlleur a fonctionner zbi</p>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma première page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex min-h-screen items-center justify-center bg-[#E3F0E1] p-6 font-sans text-center">
+    <div class="rounded-3xl bg-white px-10 py-12 shadow-lg shadow-emerald-900/5">
+        <h1 th:text="${titre}" class="text-4xl font-extrabold text-[#0078D4]">Titre par défaut</h1>
+        <p class="mt-4 text-slate-600">le controlleur a fonctionner zbi</p>
+    </div>
+</body>
 </html>

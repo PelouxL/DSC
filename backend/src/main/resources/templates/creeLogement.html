@@ -1,30 +1,57 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit to JSON</title>
-    <link rel="stylesheet" th:href="@{/creeLogement.css}">
+    <title>Ajouter un logement – AlloFraicheur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header>
-        <h1>Edit To Json</h1>
-        <p> Ici nous appelons une LLM pour reccuperer les infos et les tranfmettre en JSON</p>
+<body class="flex min-h-screen flex-col bg-[#E3F0E1] font-sans text-slate-800">
+
+    <header class="sticky top-0 z-10 border-b border-emerald-100 bg-white/80 backdrop-blur">
+        <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3">
+            <a th:href="@{/}" class="flex items-center gap-2 text-xl font-bold text-emerald-700">
+                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-600 text-white">❄</span>
+                AlloFraicheur
+            </a>
+            <ul class="flex flex-wrap items-center gap-1 text-sm font-medium text-slate-700">
+                <li><a th:href="@{/}" class="rounded-full px-4 py-2 transition hover:bg-emerald-50 hover:text-emerald-700">Accueil</a></li>
+                <li><a th:href="@{/info}" class="rounded-full px-4 py-2 transition hover:bg-emerald-50 hover:text-emerald-700">À propos</a></li>
+                <li><a th:href="@{/creeLogement}" class="rounded-full px-4 py-2 transition hover:bg-emerald-50 hover:text-emerald-700">Ajouter un logement</a></li>
+                <li><a th:href="@{/formConnexion}" class="rounded-full px-4 py-2 transition hover:bg-emerald-50 hover:text-emerald-700">Se connecter</a></li>
+                <li><a th:href="@{/inscription}" class="rounded-full bg-emerald-600 px-4 py-2 text-white transition hover:bg-emerald-700">Inscription</a></li>
+            </ul>
+        </nav>
     </header>
-    
-    <main>
-        <h2>Veuillez saisir les information de votre logement : </h2>
-        <form th:action="@{/ajouter-logement}" method="POST">
-            <label for="desc">Décrivez votre logement :</label>
-            <textarea id="desc" name="description" rows="5" required></textarea>
-    
-            <button type="submit">Analyser et Ajouter</button>
-        </form>
-    
+
+    <main class="mx-auto w-full max-w-2xl flex-1 px-4 py-12">
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-extrabold text-emerald-800 sm:text-4xl">Edit To Json</h1>
+            <p class="mt-2 text-slate-600">Ici nous appelons un LLM pour récupérer les infos et les transformer en JSON.</p>
+        </div>
+
+        <div class="rounded-3xl bg-white p-6 shadow-lg shadow-emerald-900/5 sm:p-8">
+            <h2 class="mb-6 text-lg font-semibold text-slate-800">Veuillez saisir les informations de votre logement :</h2>
+
+            <form th:action="@{/ajouter-logement}" method="POST" class="flex flex-col gap-4">
+                <div class="flex flex-col">
+                    <label for="desc" class="mb-2 text-sm font-medium text-slate-600">Décrivez votre logement :</label>
+                    <textarea id="desc" name="description" rows="6" required
+                              placeholder="Ex : Appartement de 45 m² à Lyon, 2 chambres, balcon, climatisation…"
+                              class="resize-y rounded-2xl border border-slate-200 p-4 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"></textarea>
+                </div>
+
+                <button type="submit"
+                        class="self-end rounded-full bg-emerald-600 px-8 py-3 font-semibold text-white shadow transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200">
+                    Analyser et ajouter
+                </button>
+            </form>
+        </div>
+
+        <div id="resultat" class="mt-6 hidden whitespace-pre-wrap rounded-2xl bg-slate-900 p-4 font-mono text-sm text-emerald-300"></div>
     </main>
-    
-    <div id="resultat"></div>
-    <footer>
+
+    <footer class="py-6 text-center text-sm text-slate-500">
         <p>Merci</p>
     </footer>
 </body>
