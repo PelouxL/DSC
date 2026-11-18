@@ -24,6 +24,7 @@ CREATE TABLE adherent (
     FOREIGN KEY (adresse_id) REFERENCES adresse(id)
 );
 
+/* Ancienne BDD
 CREATE TABLE logement (
     id INT PRIMARY KEY,
     proprietaire_id INT NOT NULL,
@@ -38,6 +39,53 @@ CREATE TABLE logement (
     climatisation BOOLEAN,
     chauffage BOOLEAN,
     balcon BOOLEAN,
+    FOREIGN KEY (proprietaire_id) REFERENCES adherent(id),
+    FOREIGN KEY (adresse_id) REFERENCES adresse(id),
+    FOREIGN KEY (secteur_id) REFERENCES secteur(id)
+);
+*/
+
+CREATE TABLE logement (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    proprietaire_id INT NOT NULL,
+    adresse_id INT NOT NULL,
+    secteur_id INT NOT NULL,
+    nom VARCHAR(255),
+    type VARCHAR(100),
+    montant_par_nuit INT,
+
+    -- Capacité et surfaces
+    nb_lits_simples INT,
+    nb_lits_doubles INT,
+    nb_etages INT,
+    surface_habitable INT,
+    surface_totale INT,
+    
+    -- Piscine (aplatissement du tuple prefixItems [boolean, boolean, enum, enum])
+    piscine_presence BOOLEAN,
+    piscine_couverte BOOLEAN,
+    piscine_type ENUM('creusee', 'semi-enteree', 'gonflable'),
+    piscine_nettoyage ENUM('chlore', 'brome', 'sel'),
+    
+    -- Équipements et confort
+    climatisation ENUM('fixe', 'mobile'),
+    chauffage ENUM('electrique', 'gaz', 'fioul', 'pompe a chaleur', 'bois', 'collectif', 'geothermie'),
+    salle_de_bain_et_wc_separes BOOLEAN,
+    television BOOLEAN,
+    wifi BOOLEAN,
+    
+    -- Garage (aplatissement du tuple prefixItems [boolean, integer])
+    garage_presence BOOLEAN,
+    garage_hauteur INT,
+    
+    -- Extérieur et accès
+    distance_route INT,
+    balcon BOOLEAN,
+    exposition VARCHAR(255),
+    animaux_autorises BOOLEAN,
+    amenagement_personne_a_mobilite_reduite BOOLEAN
+
+    -- Clés étrangères
     FOREIGN KEY (proprietaire_id) REFERENCES adherent(id),
     FOREIGN KEY (adresse_id) REFERENCES adresse(id),
     FOREIGN KEY (secteur_id) REFERENCES secteur(id)

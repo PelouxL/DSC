@@ -2,8 +2,6 @@ package com.example.dds.controller;
 
 import java.math.BigDecimal;
 
-import org.hibernate.annotations.Collate;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
