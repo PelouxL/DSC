@@ -29,7 +29,7 @@
         "nom": {
             "description": "Le nom du logement",
             "type": "string"
-        },
+        },  
         "type": {
             "description": "Le type de logement",
             "type": "string"

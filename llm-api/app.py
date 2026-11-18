@@ -18,6 +18,9 @@ def traitement():
         "User-Agent": "Application-Logement-Local/1.0"
     }
 
+    # Ouverture du json schema 
+    with open("logement.schema.json", "r", encoding="utf-8") as f : json_schema = f.read()
+
     try:
         response = requests.get(f"{base_url}/models", headers=headers, impersonate="chrome", timeout=10)
         models = response.json()
@@ -27,8 +30,8 @@ def traitement():
             "model": model_name,
             "messages": [
                 {
-                    "role": "system", 
-                    "content": "Analyse le texte et renvoie uniquement un JSON au format: {'chambres': int, 'climatisation': bool, 'piscine': bool, 'garage':bool, 'surface': int}. Ignore les informations inutiles."
+                    "role": "system",
+                    "content": "Analyse le texte et renvoie uniquement un JSON dans le format du json schema : "+json_schema+". Ignore les informations inutiles."  
                 },
                 {
                     "role": "user", 
