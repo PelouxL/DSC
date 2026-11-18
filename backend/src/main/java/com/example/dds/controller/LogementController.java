@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonNode;
+import java.util.Map;
 
 @Controller 
 public class LogementController {
@@ -27,20 +26,11 @@ public class LogementController {
     @PostMapping("/ajouter-logement")
     public String traiterNouveauLogement(@RequestParam("description") String description, Model model) {
         
-        String s = llmService.analyserLogementViaPython(description);
+        Map<String, Object> logement = llmService.analyserLogementViaPython(description);
 
-        try {
-            // String to json
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode logement = mapper.readTree(s);
-            
-            // Création du paquet à récupérer sur le formulaire du logement
-            model.addAttribute("logement", logement);
-        } catch (Exception e) {
-            model.addAttribute("erreur", "Erreur lors de la lecture du JSON : " + e.getMessage());
-        }
+        model.addAttribute("logement", logement);
 
-        System.out.println("Réponse de Flask et de l'IA : "+s);
+        System.out.println("Réponse de Flask et de l'IA : "+logement);
     
         return "formLogement";
     }

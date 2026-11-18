@@ -1,18 +1,21 @@
 package com.example.dds.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import java.util.Map;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class LlmService {
 
-    public String analyserLogementViaPython(String description) {
+    public Map<String, Object> analyserLogementViaPython(String description) {
         RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://localhost:5000/traitement";
@@ -29,16 +32,23 @@ public class LlmService {
 
         try {
             // 4. Envoyer la requête POST vers Flask
-            ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+            ResponseEntity<Map<String, Object>> response =
+                restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                request,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
             
             // 5. Récupérer et renvoyer le JSON généré par l'IA
             Map<String, Object> body = response.getBody();
             if (body != null && body.containsKey("resultat")) {
-                return (String) body.get("resultat");
+                return (Map<String, Object>) body.get("resultat");
             }
         } catch (Exception e) {
             System.err.println("Erreur de communication avec l'API Python : " + e.getMessage());
         }
-        return "{}"; // Retourne un JSON vide en cas d'erreur
+
+        return new HashMap<>(); // Retourne un JSON vide en cas d'erreur
     }
 }

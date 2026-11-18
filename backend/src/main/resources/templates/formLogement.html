@@ -8,13 +8,17 @@
     <body>
         <h1>Validation</h1>
         <p>
-            Vérifiez, validez et complétez les informations du logement.
+            Vérifiez, validez et complétez les informations du logement : 
+            <strong th:text="${logement['nom'] ?: 'Nom non détecté'}"></strong>
+        </p>
+
+        <!-- Affichage temporaire de toute la Map pour vérifier ce que Flask renvoie -->
+        <p style="color: gray; font-size: 0.9em;">
+            Données reçues : <span th:text="${logement}"></span>
         </p>
 
         <!-- Formulaire -->
-         <form action="."  method="post">
-            <label for="name">Nom :</label>
-            <input type="text" id="name" name="user_name" th:value="${logement.nom}"/>  
-         </form>
+        <form action="." method="post"> 
+        </form>
     </body>
 </html>
