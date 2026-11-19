@@ -13,7 +13,7 @@ public class Adresse {
     
     @Id 
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    long id;
+    Integer id;
 
     Integer numero;
 

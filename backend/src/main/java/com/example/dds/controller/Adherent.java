@@ -18,7 +18,7 @@ public class Adherent {
     
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Integer id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "adresse_id")

@@ -42,8 +42,12 @@ public class LlmService {
             
             // 5. Récupérer et renvoyer le JSON généré par l'IA
             Map<String, Object> body = response.getBody();
-            if (body != null && body.containsKey("resultat")) {
-                return (Map<String, Object>) body.get("resultat");
+            if (body != null && body.get("resultat") instanceof Map<?, ?> resultatMap) {
+
+                Map<String, Object> logement = new HashMap<>();
+                resultatMap.forEach((k, v) -> logement.put(String.valueOf(k), v));
+                
+                return logement;
             }
         } catch (Exception e) {
             System.err.println("Erreur de communication avec l'API Python : " + e.getMessage());
