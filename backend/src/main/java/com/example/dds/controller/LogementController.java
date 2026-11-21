@@ -1,20 +1,31 @@
 package com.example.dds.controller;
 
 import com.example.dds.service.LlmService;
+import com.example.dds.service.LogementService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import java.util.Optional;
 
-@Controller 
+@Controller
 public class LogementController {
+
+    @Autowired
+    private LogementRepository repo;
 
     @Autowired
     private LlmService llmService;
 
+    @Autowired
+    private LogementService logementService;
+
     // Affiche la page avec le formulaire (déplacé depuis HomeController)
-    @GetMapping("/creeLogement") 
+    @GetMapping("/creeLogement")
     public String creeLogement() {
         return "creeLogement";
     }
@@ -22,11 +33,30 @@ public class LogementController {
     // Réceptionne les données quand l'utilisateur clique sur "Valider"
     @PostMapping("/ajouter-logement")
     public String traiterNouveauLogement(@RequestParam("description") String description) {
-        
+
         String jsonResultat = llmService.analyserLogementViaPython(description);
-        
+
         System.out.println("Réponse de Flask et de l'IA : " + jsonResultat);
-        
+
         return "redirect:/";
+    }
+
+    @GetMapping("/logement")
+    public String logement(Model model) {
+        model.addAttribute("logements", logementService.getLogements());
+        return "logement";
+    }
+
+    @GetMapping("/logement/{id}")
+    public String afficheCarte(@PathVariable long id, Model m) {
+        Optional<Logement> opt = repo.findById(id);
+        if (opt.isEmpty()) {
+            // we have an old url to a deleted card
+            return "redirect:/logement?error=Logement introuvable";
+        } else {
+            Logement l = opt.get();
+            m.addAttribute("logement", l);
+            return "detail_logement";
+        }
     }
 }
