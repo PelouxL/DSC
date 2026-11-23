@@ -1,3 +1,5 @@
+import json
+import re
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from curl_cffi import requests
@@ -18,9 +20,10 @@ def traitement():
         "User-Agent": "Application-Logement-Local/1.0"
     }
 
-    # Ouverture du json schema 
-    with open("logement.schema.json", "r", encoding="utf-8") as f : json_schema = f.read()
+    with open("logement.schema.json", "r", encoding="utf-8") as f:
+        json_schema = f.read()
 
+    reponse_ia = ""
     try:
         response = requests.get(f"{base_url}/models", headers=headers, impersonate="chrome", timeout=10)
         models = response.json()
@@ -31,7 +34,7 @@ def traitement():
             "messages": [
                 {
                     "role": "system",
-                    "content": "Analyse le texte et renvoie uniquement un JSON dans le format du json schema : "+json_schema+". Ignore les informations inutiles."  
+                    "content": "Analyse le texte et renvoie uniquement un JSON dans le format du json schema : " + json_schema + ". Ignore les informations inutiles."
                 },
                 {
                     "role": "user", 
@@ -39,7 +42,7 @@ def traitement():
                 }
             ],
             "stream": False,
-            "max_tokens": 150
+            "max_tokens": 600
         }
 
         print("--- ÉTAPE 2 : Envoi du texte à l'IA ---", flush=True)
@@ -48,8 +51,18 @@ def traitement():
 
         reponse_ia = result['choices'][0]['message']['content']
         print(f"--- ÉTAPE 3 : Succès ! Réponse : {reponse_ia} ---", flush=True)
-        return jsonify({"resultat": reponse_ia})
 
+        # Extraire uniquement le bloc JSON { ... } et le convertir en objet Python
+        match = re.search(r'\{.*\}', reponse_ia, re.DOTALL)
+        if not match:
+            return jsonify({"erreur": "Aucun objet JSON trouvé", "brut": reponse_ia}), 500
+
+        vrai_json = json.loads(match.group(0))
+        return jsonify({"resultat": vrai_json})
+    
+    except json.JSONDecodeError as e:
+        return jsonify({"erreur": "Le LLM n'a pas renvoyé un JSON valide", "details": str(e), "brut": reponse_ia}), 500
+    
     except Exception as e:
         return jsonify({"erreur": str(e)}), 500
 

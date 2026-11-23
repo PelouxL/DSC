@@ -12,7 +12,7 @@
         <ul>
             <li><a th:href="@{/}">Accueil</a></li>
             <li><a th:href="@{/info}">A propos</a></li>
-            <li><a th:href="@{/creeLogement}">Ajouté un logement</a></li>
+            <li><a th:href="@{/creeLogement}">Ajouter un logement</a></li>
             
             <th:block th:if="${utilisateur != null}">
                 <form th:action="@{/logout}" method="POST" style="display: inline;">
@@ -20,8 +20,8 @@
                 </form>
             </th:block>
             <th:block th:if="${utilisateur == null}">
-                <li><a th:href="@{/formInscription}">inscription</a></li>
-                <li><a th:href="@{/formConnexion}">Se connecté</a></li>
+                <li><a th:href="@{/formInscription}">Inscription</a></li>
+                <li><a th:href="@{/formConnexion}">Se connecter</a></li>
             </th:block>
         </ul>
     </nav>

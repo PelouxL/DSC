@@ -8,17 +8,410 @@
     <body>
         <h1>Validation</h1>
         <p>
-            Vérifiez, validez et complétez les informations du logement : 
-            <strong th:text="${logement['nom'] ?: 'Nom non détecté'}"></strong>
-        </p>
-
-        <!-- Affichage temporaire de toute la Map pour vérifier ce que Flask renvoie -->
-        <p style="color: gray; font-size: 0.9em;">
-            Données reçues : <span th:text="${logement}"></span>
+            Vérifiez, validez et complétez les informations du logement.
         </p>
 
         <!-- Formulaire -->
-        <form action="." method="post"> 
+        <form action="." method="post">
+
+            <div class="infos_logement">
+                <h2>Informations du logement</h2>
+                <ul>
+
+                    <!-- Nom du logement -->
+                    <li>
+                        <label for="nom_logement">Nom&nbsp;:</label>
+                        <input type="text" id="nom_logement" name="nom_logement"
+                            th:value="${(logement != null && logement['nom'] != null) ? logement['nom'] : ''}" required/>
+                    </li>
+
+                    <!-- Description -->
+                    <li>
+                        <label for="description">Description&nbsp;:</label><br>
+                        <textarea id="description" name="description" rows="5" cols="100" maxlength="500"
+                            placeholder="Description du logement..."
+                            th:text="${(logement != null && logement['description'] != null) ? logement['description'] : ''}"></textarea>
+                    </li>
+
+                    <!-- Adresse -->
+                    <li>
+                        Adresse&nbsp;:<br>
+                        <ul>
+                            <li>
+                                <label for="numVoie">Numéro de voie&nbsp;:</label>
+                                <input type="number" id="numVoie" name="numVoie" 
+                                    th:value="${(logement != null && logement['adresse'] != null && #lists.size(logement['adresse']) > 0 && logement['adresse'][0] != null) ? logement['adresse'][0] : ''}" required/>
+                            </li>
+                            <li>
+                                <label for="voie">Voie&nbsp;:</label>
+                                <input type="text" id="voie" name="voie"
+                                    th:value="${(logement != null && logement['adresse'] != null && #lists.size(logement['adresse']) > 1 && logement['adresse'][1] != null) ? logement['adresse'][1] : ''}" required/>
+                            </li>
+                            <li>
+                                <label for="codePostal">Code postal&nbsp;:</label>
+                                <input type="number" id="codePostal" name="codePostal" 
+                                    th:value="${(logement != null && logement['adresse'] != null && #lists.size(logement['adresse']) > 2 && logement['adresse'][2] != null) ? logement['adresse'][2] : ''}" required/>
+                            </li>
+                            <li>
+                                <label for="ville">Ville&nbsp;:</label>
+                                <input type="text" id="ville" name="ville" 
+                                    th:value="${(logement != null && logement['adresse'] != null && #lists.size(logement['adresse']) > 3 && logement['adresse'][3] != null) ? logement['adresse'][3] : ''}" required/>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Montant par nuit -->
+                    <li>
+                        <label for="montant">Montant par nuit&nbsp;:</label>
+                        <input type="number" id="montant" name="montant"
+                            th:value="${(logement != null && logement['montant_par_nuit'] != null) ? logement['montant_par_nuit'] : ''}" required/>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="caracteristiques">
+                <h2>Caractéristiques</h2>
+
+                <ul>
+                    <!-- Type de logement -->
+                    <li>
+                        Type de logement&nbsp;:<br>
+
+                        <input type="radio" id="type_appart" name="type_logement" value="Appartement"
+                            th:checked="${logement != null && logement['type']?.toLowerCase() == 'appartement'}" required/>
+                        <label for="type_appart">Appartement</label>
+
+                        <input type="radio" id="type_maison" name="type_logement" value="Maison"
+                            th:checked="${logement != null && logement['type']?.toLowerCase() == 'maison'}" />
+                        <label for="type_maison">Maison</label>
+                    </li>
+
+                    <!-- Nombre d'etages -->
+                    <li>
+                        <label for="etages">Nombre d'étages&nbsp;:</label>
+                        <input type="number" id="etages" name="etages"
+                            th:value="${(logement != null && logement['nb_etages'] != null) ? logement['nb_etages'] : ''}" required/>
+                    </li>
+
+                    <!-- Surface habitable -->
+                    <li>
+                        <label for="surfHab">Surface habitable&nbsp;:</label>
+                        <input type="number" id="surfHab" name="surfHab"
+                            th:value="${(logement != null && logement['surface_habitable'] != null) ? logement['surface_habitable'] : ''}" required/>
+                    </li>
+
+                    <!-- Surface totale -->
+                    <li>
+                        <label for="surfTot">Surface totale&nbsp;:</label>
+                        <input type="number" id="surfTot" name="surfTot"
+                            th:value="${(logement != null && logement['surface_totale'] != null) ? logement['surface_totale'] : ''}"/>
+                    </li>
+
+                    <!-- Salle de bain et WC separes -->
+                    <li>
+                        Salle de bain et WC séparés&nbsp;:<br>
+
+                        <input type="radio" id="sdbwc_oui" name="sdbwc" value="oui"
+                            th:checked="${logement != null && logement['salle_de_bain_et_WC_separes'] == true}" required/>
+                        <label for="sdbwc_oui">Oui</label>
+
+                        <input type="radio" id="sdbwc_non" name="sdbwc" value="non"
+                            th:checked="${logement == null || logement['salle_de_bain_et_WC_separes'] != true}" />
+                        <label for="sdbwc_non">Non</label>
+                    </li>
+
+                    <!-- Distance de la route -->
+                    <li>
+                        <label for="distRoute">Distance de la route&nbsp;:</label>
+                        <input type="number" id="distRoute" name="distRoute"
+                            th:value="${(logement != null && logement['distance_route'] != null) ? logement['distance_route'] : ''}"/>
+                    </li>
+
+                    <!-- Exposition au soleil -->
+                    <li>
+                        Exposition au soleil&nbsp;:<br>
+
+                        <input type="checkbox" id="expo_nord" name="exposition" value="Nord"
+                            th:checked="${logement != null && logement['exposition'] != null && logement['exposition'].![#this.toLowerCase()].contains('nord')}" />
+                        <label for="expo_nord">Nord</label>
+
+                        <input type="checkbox" id="expo_sud" name="exposition" value="Sud"
+                            th:checked="${logement != null && logement['exposition'] != null && logement['exposition'].![#this.toLowerCase()].contains('sud')}" />
+                        <label for="expo_sud">Sud</label>
+
+                        <input type="checkbox" id="expo_est" name="exposition" value="Est"
+                            th:checked="${logement != null && logement['exposition'] != null && logement['exposition'].![#this.toLowerCase()].contains('est')}" />
+                        <label for="expo_est">Est</label>
+
+                        <input type="checkbox" id="expo_ouest" name="exposition" value="Ouest"
+                            th:checked="${logement != null && logement['exposition'] != null && logement['exposition'].![#this.toLowerCase()].contains('ouest')}" />
+                        <label for="expo_ouest">Ouest</label>
+
+                        <input type="checkbox" id="expo_ne" name="exposition" value="Nord-Est"
+                            th:checked="${logement != null && logement['exposition'] != null && logement['exposition'].![#this.toLowerCase()].contains('nord-est')}" />
+                        <label for="expo_ne">Nord-Est</label>
+
+                        <input type="checkbox" id="expo_no" name="exposition" value="Nord-Ouest"
+                            th:checked="${logement != null && logement['exposition'] != null && logement['exposition'].![#this.toLowerCase()].contains('nord-ouest')}" />
+                        <label for="expo_no">Nord-Ouest</label>
+
+                        <input type="checkbox" id="expo_se" name="exposition" value="Sud-Est"
+                            th:checked="${logement != null && logement['exposition'] != null && logement['exposition'].![#this.toLowerCase()].contains('sud-est')}" />
+                        <label for="expo_se">Sud-Est</label>
+
+                        <input type="checkbox" id="expo_so" name="exposition" value="Sud-Ouest"
+                            th:checked="${logement != null && logement['exposition'] != null && logement['exposition'].![#this.toLowerCase()].contains('sud-ouest')}" />
+                        <label for="expo_so">Sud-Ouest</label>
+                    </li>
+
+                    <!-- Animaux autorises -->
+                    <li>
+                        Animaux autorisés&nbsp;:<br>
+
+                        <input type="radio" id="animaux_oui" name="animaux" value="oui"
+                            th:checked="${logement != null && logement['animaux_autorises'] == true}" required/>
+                        <label for="animaux_oui">Oui</label>
+
+                        <input type="radio" id="animaux_non" name="animaux" value="non"
+                            th:checked="${logement == null || logement['animaux_autorises'] != true}" />
+                        <label for="animaux_non">Non</label>
+                    </li>
+
+                    <!-- Amenagement personnes a mobilite reduite -->
+                    <li>
+                        Aménagements pour personnes à mobilité réduite&nbsp;:<br>
+
+                        <input type="radio" id="amenagement_oui" name="amenagement" value="oui"
+                            th:checked="${logement != null && logement['aménagement_personne_a_mobilite_reduite'] == true}" required/>
+                        <label for="amenagement_oui">Oui</label>
+
+                        <input type="radio" id="amenagement_non" name="amenagement" value="non"
+                            th:checked="${logement == null || logement['aménagement_personne_a_mobilite_reduite'] != true}" />
+                        <label for="amenagement_non">Non</label>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="equipements">
+                <h2>Equipements</h2>
+                <ul>
+
+                    <!-- Couchages -->
+                    <li>
+                        Couchages&nbsp;:<br>
+                        <ul>
+                            <li>
+                                <label for="simple">Simples&nbsp;:</label>
+                                <input type="number" id="simple" name="simple"
+                                    th:value="${(logement != null && logement['nb_lits_simples'] != null) ? logement['nb_lits_simples'] : ''}" required/>
+                            </li>
+                            <li>
+                                <label for="double">Doubles&nbsp;:</label>
+                                <input type="number" id="double" name="double"
+                                    th:value="${(logement != null && logement['nb_lits_doubles'] != null) ? logement['nb_lits_doubles'] : ''}" required/>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Piscine -->
+                    <li>
+                        Piscine&nbsp;:<br>
+
+                        <input type="radio" id="piscine_oui" name="piscine" value="oui"
+                            onclick="toggleSection('detail_piscine', true)"
+                            th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 0 && logement['piscine'][0] == true}" required/>
+                        <label for="piscine_oui">Oui</label>
+
+                        <input type="radio" id="piscine_non" name="piscine" value="non"
+                            onclick="toggleSection('detail_piscine', false)"
+                            th:checked="${logement == null || logement['piscine'] == null || #lists.size(logement['piscine']) == 0 || logement['piscine'][0] != true}" />
+                        <label for="piscine_non">Non</label>
+
+                        <div id="detail_piscine"
+                             th:style="${(logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 0 && logement['piscine'][0] == true) ? 'display: block;' : 'display: none;'}">
+                            Détails&nbsp;:
+                            <ul>
+
+                                <li>
+                                    Couverte&nbsp;:<br>
+
+                                    <input type="radio" id="couverte_oui" name="couverte" value="oui" class="req-piscine"
+                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 1 && logement['piscine'][1] == true}"/>
+                                    <label for="couverte_oui">Oui</label>
+
+                                    <input type="radio" id="couverte_non" name="couverte" value="non"
+                                        th:checked="${logement == null || logement['piscine'] == null || #lists.size(logement['piscine']) <= 1 || logement['piscine'][1] != true}" />
+                                    <label for="couverte_non">Non</label>
+                                </li>
+
+                                <li>
+                                    Type&nbsp;:<br>
+
+                                    <input type="radio" id="type_creusee" name="type_piscine" value="Creusee" class="req-piscine"
+                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 2 && logement['piscine'][2]?.toLowerCase() == 'creusee'}"/>
+                                    <label for="type_creusee">Creusée</label>
+
+                                    <input type="radio" id="type_semi_enteree" name="type_piscine" value="Semi-enteree"
+                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 2 && logement['piscine'][2]?.toLowerCase() == 'semi-enteree'}"/>
+                                    <label for="type_semi_enteree">Semi-enterrée</label>
+
+                                    <input type="radio" id="type_gonflable" name="type_piscine" value="Gonflable"
+                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 2 && logement['piscine'][2]?.toLowerCase() == 'gonflable'}"/>
+                                    <label for="type_gonflable">Gonflable</label>
+                                </li>
+
+                                <li>
+                                    Nettoyage&nbsp;:<br>
+
+                                    <input type="radio" id="nettoyage_chlore" name="nettoyage" value="Chlore" class="req-piscine"
+                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 3 && logement['piscine'][3]?.toLowerCase() == 'chlore'}"/>
+                                    <label for="nettoyage_chlore">Chlore</label>
+
+                                    <input type="radio" id="nettoyage_brome" name="nettoyage" value="Brome"
+                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 3 && logement['piscine'][3]?.toLowerCase() == 'brome'}"/>
+                                    <label for="nettoyage_brome">Brome</label>
+
+                                    <input type="radio" id="nettoyage_sel" name="nettoyage" value="Sel"
+                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 3 && logement['piscine'][3]?.toLowerCase() == 'sel'}"/>
+                                    <label for="nettoyage_sel">Sel</label>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                    </li>
+
+                    <!-- Climatisation -->
+                    <li>
+                        Climatisation&nbsp;:<br>
+
+                        <input type="radio" id="clim_aucune" name="clim" value="Aucune"
+                            th:checked="${logement == null || logement['climatisation'] == null}" required/>
+                        <label for="clim_aucune">Aucune</label>
+
+                        <input type="radio" id="clim_fixe" name="clim" value="Fixe"
+                            th:checked="${logement != null && logement['climatisation']?.toLowerCase() == 'fixe'}"/>
+                        <label for="clim_fixe">Fixe</label>
+
+                        <input type="radio" id="clim_mobile" name="clim" value="Mobile"
+                            th:checked="${logement != null && logement['climatisation']?.toLowerCase() == 'mobile'}"/>
+                        <label for="clim_mobile">Mobile</label>
+                    </li>
+
+                    <!-- Chauffage -->
+                    <li>
+                        Chauffage&nbsp;:<br>
+
+                        <input type="radio" id="chauffage_aucun" name="chauffage" value="Aucun"
+                            th:checked="${logement == null || logement['chauffage'] == null}" required/>
+                        <label for="chauffage_aucun">Aucun</label>
+
+                        <input type="radio" id="chauffage_electrique" name="chauffage" value="Electrique"
+                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'electrique'}"/>
+                        <label for="chauffage_electrique">Electrique</label>
+
+                        <input type="radio" id="chauffage_gaz" name="chauffage" value="Gaz"
+                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'gaz'}"/>
+                        <label for="chauffage_gaz">Gaz</label>
+
+                        <input type="radio" id="chauffage_fioul" name="chauffage" value="Fioul"
+                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'fioul'}"/>
+                        <label for="chauffage_fioul">Fioul</label>
+
+                        <input type="radio" id="chauffage_pompe_a_chaleur" name="chauffage" value="Pompe_a_chaleur"
+                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'pompe_a_chaleur'}"/>
+                        <label for="chauffage_pompe_a_chaleur">Pompe à chaleur</label>
+
+                        <input type="radio" id="chauffage_bois" name="chauffage" value="Bois"
+                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'bois'}"/>
+                        <label for="chauffage_bois">Bois</label>
+
+                        <input type="radio" id="chauffage_collectif" name="chauffage" value="Collectif"
+                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'collectif'}"/>
+                        <label for="chauffage_collectif">Collectif</label>
+
+                        <input type="radio" id="chauffage_geothermie" name="chauffage" value="Geothermie"
+                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'geothermie'}"/>
+                        <label for="chauffage_geothermie">Géothermie</label>
+                    </li>
+
+                    <!-- Television -->
+                    <li>
+                        Télévision&nbsp;:<br>
+
+                        <input type="radio" id="tele_oui" name="tele" value="oui"
+                            th:checked="${logement != null && logement['television'] == true}" required/>
+                        <label for="tele_oui">Oui</label>
+
+                        <input type="radio" id="tele_non" name="tele" value="non"
+                            th:checked="${logement == null || logement['television'] != true}" />
+                        <label for="tele_non">Non</label>
+                    </li>
+
+                    <!-- Wi-Fi -->
+                    <li>
+                        Wi-Fi&nbsp;:<br>
+
+                        <input type="radio" id="wifi_oui" name="wifi" value="oui"
+                            th:checked="${logement != null && logement['Wi-Fi'] == true}" required/>
+                        <label for="wifi_oui">Oui</label>
+
+                        <input type="radio" id="wifi_non" name="wifi" value="non"
+                            th:checked="${logement == null || logement['Wi-Fi'] != true}" />
+                        <label for="wifi_non">Non</label>
+                    </li>
+
+                    <!-- Garage -->
+                    <li>
+                        Garage&nbsp;:<br>
+
+                        <input type="radio" id="garage_oui" name="garage" value="oui"
+                            onclick="toggleSection('detail_garage', true)"
+                            th:checked="${logement != null && logement['garage'] != null && #lists.size(logement['garage']) > 0 && logement['garage'][0] == true}" required/>
+                        <label for="garage_oui">Oui</label>
+
+                        <input type="radio" id="garage_non" name="garage" value="non"
+                            onclick="toggleSection('detail_garage', false)"
+                            th:checked="${logement == null || logement['garage'] == null || #lists.size(logement['garage']) == 0 || logement['garage'][0] != true}" />
+                        <label for="garage_non">Non</label>
+
+                        <div id="detail_garage"
+                             th:style="${(logement != null && logement['garage'] != null && #lists.size(logement['garage']) > 0 && logement['garage'][0] == true) ? 'display: block;' : 'display: none;'}">
+                            <ul>
+                                <li>
+                                    <label for="h_garage">Hauteur&nbsp;:</label>
+                                    <input type="number" step="0.01" id="h_garage" name="h_garage" 
+                                        th:value="${(logement != null && logement['garage'] != null && #lists.size(logement['garage']) > 1 && logement['garage'][1] != null) ? logement['garage'][1] : ''}"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="submit">Valider le logement</button>
+            
         </form>
+
+        <script>
+            function cacherDetails(id, afficher) {
+                const bloc = document.getElementById(id);
+                bloc.style.display = afficher ? 'block' : 'none';
+
+                /* jsp si c utile */
+                const champs = bloc.querySelectorAll('input');
+                champs.forEach(champ => {
+                    if (champ.type === 'number' || champ.classList.contains('req-piscine')) {
+                        champ.required = afficher;
+                    }
+                });
+            }
+
+            window.addEventListener('DOMContentLoaded', () => {
+                cacherDetails('detail_piscine', document.getElementById('piscine_oui').checked);
+                cacherDetails('detail_garage', document.getElementById('garage_oui').checked);
+            });
+        </script>
     </body>
 </html>

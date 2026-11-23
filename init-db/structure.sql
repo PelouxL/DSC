@@ -24,7 +24,7 @@ CREATE TABLE adherent (
     FOREIGN KEY (adresse_id) REFERENCES adresse(id)
 );
 
-/* Ancienne BDD
+/* Ancienne table
 CREATE TABLE logement (
     id INT PRIMARY KEY,
     proprietaire_id INT NOT NULL,
@@ -45,6 +45,7 @@ CREATE TABLE logement (
 );
 */
 
+-- ATTENTION PAS DE DESCRIPTION
 CREATE TABLE logement (
     id INT PRIMARY KEY AUTO_INCREMENT,
     proprietaire_id INT NOT NULL,
@@ -83,7 +84,7 @@ CREATE TABLE logement (
     balcon BOOLEAN,
     exposition VARCHAR(255),
     animaux_autorises BOOLEAN,
-    amenagement_personne_a_mobilite_reduite BOOLEAN
+    amenagement_personne_a_mobilite_reduite BOOLEAN,
 
     -- Clés étrangères
     FOREIGN KEY (proprietaire_id) REFERENCES adherent(id),
