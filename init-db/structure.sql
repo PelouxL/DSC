@@ -23,27 +23,6 @@ CREATE TABLE adherent (
     FOREIGN KEY (adresse_id) REFERENCES adresse(id)
 );
 
-/* Ancienne table
-CREATE TABLE logement (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    proprietaire_id INT NOT NULL,
-    adresse_id INT NOT NULL,
-    secteur_id INT NOT NULL,
-    type VARCHAR(255) NOT NULL,
-    montant_par_nuit INT NOT NULL CHECK (montant_par_nuit > 0),
-    nb_lit_simple INT NOT NULL DEFAULT 0 CHECK (nb_lit_simple >= 0),
-    nb_lit_double INT NOT NULL DEFAULT 0 CHECK (nb_lit_double >= 0),
-    garage BOOLEAN DEFAULT FALSE,
-    piscine BOOLEAN DEFAULT FALSE,
-    climatisation BOOLEAN DEFAULT FALSE,
-    chauffage BOOLEAN DEFAULT FALSE,
-    balcon BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (proprietaire_id) REFERENCES adherent(id),
-    FOREIGN KEY (adresse_id) REFERENCES adresse(id),
-    FOREIGN KEY (secteur_id) REFERENCES secteur(id)
-);
-*/
-
 -- ATTENTION PAS DE DESCRIPTION
 CREATE TABLE logement (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -153,41 +132,45 @@ INSERT INTO adherent (id, adresse_id, prenom, nom, telephone, email, mdp, note) 
 (3, 3, 'Paul', 'Martin', '0609101112', 'paul.martin@exemple.fr', 'mdp_hash_3', 3.9),
 (4, 4, 'Sophie', 'Durand', '0613141516', 'sophie.durand@exemple.fr', 'mdp_hash_4', 5.0);
 
--- 3. Logements (3 initiaux + 30 ajoutés)
-INSERT INTO logement (id, proprietaire_id, adresse_id, secteur_id, type, montant_par_nuit, nb_lit_simple, nb_lit_double, garage, piscine, climatisation, chauffage, balcon) VALUES
-(1, 1, 1, 1, 'Appartement', 80, 0, 1, FALSE, FALSE, TRUE, TRUE, TRUE),
-(2, 2, 2, 2, 'Maison', 150, 2, 2, TRUE, FALSE, TRUE, TRUE, FALSE),
-(3, 3, 3, 3, 'Villa', 300, 2, 3, TRUE, TRUE, TRUE, TRUE, TRUE),
-(4, 4, 4, 1, 'Appartement', 95, 1, 1, FALSE, FALSE, TRUE, TRUE, TRUE),
-(5, 1, 5, 3, 'Maison', 180, 2, 2, TRUE, FALSE, FALSE, TRUE, TRUE),
-(6, 2, 1, 1, 'Studio', 65, 0, 1, FALSE, FALSE, TRUE, TRUE, FALSE),
-(7, 3, 2, 2, 'Villa', 340, 3, 3, TRUE, TRUE, TRUE, TRUE, TRUE),
-(8, 4, 3, 3, 'Appartement', 110, 2, 1, FALSE, FALSE, TRUE, TRUE, TRUE),
-(9, 1, 4, 1, 'Maison', 165, 1, 2, TRUE, FALSE, TRUE, TRUE, FALSE),
-(10, 2, 5, 3, 'Villa', 290, 2, 2, TRUE, TRUE, FALSE, TRUE, TRUE),
-(11, 3, 1, 1, 'Studio', 70, 2, 0, FALSE, FALSE, FALSE, TRUE, FALSE),
-(12, 4, 2, 2, 'Appartement', 90, 1, 1, FALSE, FALSE, TRUE, TRUE, FALSE),
-(13, 1, 3, 3, 'Maison', 210, 2, 3, TRUE, FALSE, TRUE, TRUE, TRUE),
-(14, 2, 4, 1, 'Appartement', 105, 0, 2, FALSE, FALSE, TRUE, TRUE, TRUE),
-(15, 3, 5, 3, 'Villa', 380, 4, 3, TRUE, TRUE, TRUE, TRUE, TRUE),
-(16, 4, 1, 1, 'Studio', 60, 1, 0, FALSE, FALSE, FALSE, TRUE, FALSE),
-(17, 1, 2, 2, 'Maison', 145, 3, 1, TRUE, FALSE, FALSE, TRUE, FALSE),
-(18, 2, 3, 3, 'Appartement', 125, 1, 2, TRUE, FALSE, TRUE, TRUE, TRUE),
-(19, 3, 4, 1, 'Appartement', 85, 2, 0, FALSE, FALSE, TRUE, TRUE, FALSE),
-(20, 4, 5, 3, 'Maison', 225, 1, 3, TRUE, TRUE, TRUE, TRUE, TRUE),
-(21, 1, 1, 1, 'Studio', 75, 0, 1, FALSE, FALSE, TRUE, TRUE, FALSE),
-(22, 2, 2, 2, 'Villa', 275, 2, 2, TRUE, TRUE, TRUE, TRUE, FALSE),
-(23, 3, 3, 3, 'Appartement', 130, 2, 1, FALSE, FALSE, TRUE, TRUE, TRUE),
-(24, 4, 4, 1, 'Maison', 155, 2, 2, FALSE, FALSE, TRUE, TRUE, TRUE),
-(25, 1, 5, 3, 'Appartement', 115, 1, 1, TRUE, FALSE, FALSE, TRUE, TRUE),
-(26, 2, 1, 1, 'Villa', 310, 3, 2, TRUE, TRUE, TRUE, TRUE, TRUE),
-(27, 3, 2, 2, 'Studio', 55, 1, 0, FALSE, FALSE, FALSE, TRUE, FALSE),
-(28, 4, 3, 3, 'Maison', 195, 2, 2, TRUE, FALSE, TRUE, TRUE, TRUE),
-(29, 1, 4, 1, 'Appartement', 98, 1, 1, FALSE, FALSE, TRUE, TRUE, FALSE),
-(30, 2, 5, 3, 'Villa', 360, 2, 4, TRUE, TRUE, TRUE, TRUE, TRUE),
-(31, 3, 1, 1, 'Maison', 170, 3, 1, TRUE, FALSE, TRUE, TRUE, FALSE),
-(32, 4, 2, 2, 'Appartement', 88, 0, 1, FALSE, FALSE, FALSE, TRUE, TRUE),
-(33, 1, 3, 3, 'Villa', 325, 2, 3, TRUE, TRUE, TRUE, TRUE, TRUE);
+-- 3. Logements (30 ajoutés)
+INSERT INTO logement (
+    proprietaire_id, adresse_id, secteur_id, nom, type, montant_par_nuit,
+    nb_lits_simples, nb_lits_doubles, nb_etages, surface_habitable, surface_totale,
+    piscine_presence, piscine_couverte, piscine_type, piscine_nettoyage,
+    climatisation, chauffage, salle_de_bain_et_wc_separes, television, wifi,
+    garage_presence, garage_hauteur, distance_route, balcon, exposition,
+    animaux_autorises, amenagement_personne_a_mobilite_reduite
+) VALUES
+(1, 1, 1, 'Appartement du Port', 'Appartement', 85, 0, 1, 1, 45, 50, FALSE, NULL, NULL, NULL, 'fixe', 'electrique', TRUE, TRUE, TRUE, FALSE, NULL, 15, TRUE, 'Sud', FALSE, TRUE),
+(2, 2, 2, 'Maison des Mouettes', 'Maison', 150, 2, 2, 2, 110, 350, FALSE, NULL, NULL, NULL, 'mobile', 'gaz', TRUE, TRUE, TRUE, TRUE, 210, 30, FALSE, 'Sud-Ouest', TRUE, FALSE),
+(3, 3, 3, 'Villa Mer Azur', 'Maison', 320, 2, 3, 2, 180, 800, TRUE, FALSE, 'creusee', 'sel', 'fixe', 'pompe a chaleur', TRUE, TRUE, TRUE, TRUE, 240, 50, TRUE, 'Sud, Ouest', TRUE, TRUE),
+(4, 4, 1, 'Studio Centre Historique', 'Appartement', 60, 0, 1, 1, 28, 28, FALSE, NULL, NULL, NULL, NULL, 'electrique', FALSE, TRUE, TRUE, FALSE, NULL, 5, FALSE, 'Est', FALSE, FALSE),
+(1, 2, 2, 'Pavillon des Pins', 'Maison', 190, 3, 2, 1, 125, 500, TRUE, TRUE, 'creusee', 'chlore', 'fixe', 'geothermie', TRUE, TRUE, TRUE, TRUE, 220, 40, FALSE, 'Sud-Est', TRUE, TRUE),
+(2, 3, 3, 'Loft Industriel', 'Appartement', 130, 1, 2, 2, 95, 105, FALSE, NULL, NULL, NULL, 'fixe', 'collectif', TRUE, TRUE, TRUE, TRUE, 200, 10, TRUE, 'Ouest', FALSE, FALSE),
+(3, 4, 1, 'Chalet du Lac', 'Maison', 210, 4, 2, 2, 135, 600, FALSE, NULL, NULL, NULL, NULL, 'bois', TRUE, TRUE, FALSE, TRUE, 250, 100, TRUE, 'Sud', TRUE, FALSE),
+(4, 1, 2, 'Résidence Les Oliviers', 'Appartement', 95, 2, 1, 1, 65, 72, TRUE, FALSE, 'creusee', 'brome', 'mobile', 'electrique', TRUE, TRUE, TRUE, FALSE, NULL, 25, TRUE, 'Sud, Est', FALSE, TRUE),
+(1, 3, 3, 'Maison de Campagne', 'Maison', 140, 2, 2, 2, 115, 1200, TRUE, FALSE, 'semi-enteree', 'chlore', NULL, 'fioul', FALSE, TRUE, TRUE, TRUE, 230, 80, FALSE, 'Nord-Est, Sud-Ouest', TRUE, FALSE),
+(2, 4, 1, 'Duplex Vue Panoramique', 'Appartement', 175, 1, 2, 2, 105, 120, FALSE, NULL, NULL, NULL, 'fixe', 'pompe a chaleur', TRUE, TRUE, TRUE, TRUE, 210, 20, TRUE, 'Sud-Ouest', FALSE, FALSE),
+(3, 1, 2, 'Bungalow Les Flots', 'Maison', 110, 2, 1, 1, 55, 200, TRUE, FALSE, 'gonflable', 'chlore', 'mobile', 'electrique', FALSE, FALSE, TRUE, FALSE, NULL, 35, FALSE, 'Ouest', TRUE, TRUE),
+(4, 2, 3, 'Hôtel Particulier', 'Maison', 450, 4, 4, 3, 280, 950, TRUE, TRUE, 'creusee', 'sel', 'fixe', 'gaz', TRUE, TRUE, TRUE, TRUE, 260, 15, TRUE, 'Nord, Sud, Est, Ouest', TRUE, TRUE),
+(1, 4, 1, 'T2 Cosy Gare', 'Appartement', 70, 0, 1, 1, 40, 43, FALSE, NULL, NULL, NULL, NULL, 'collectif', FALSE, TRUE, TRUE, FALSE, NULL, 8, TRUE, 'Nord-Ouest', FALSE, FALSE),
+(2, 1, 2, 'Villa Soleil Levant', 'Maison', 280, 2, 3, 2, 160, 700, TRUE, FALSE, 'creusee', 'brome', 'fixe', 'pompe a chaleur', TRUE, TRUE, TRUE, TRUE, 235, 60, TRUE, 'Est, Sud', FALSE, TRUE),
+(3, 2, 3, 'Appartement Familial Parc', 'Appartement', 120, 3, 1, 1, 88, 95, FALSE, NULL, NULL, NULL, 'mobile', 'gaz', TRUE, TRUE, TRUE, TRUE, 195, 30, TRUE, 'Sud', TRUE, TRUE),
+(4, 3, 1, 'Longère Rénovée', 'Maison', 230, 4, 3, 2, 195, 1500, TRUE, TRUE, 'semi-enteree', 'sel', NULL, 'bois', TRUE, TRUE, TRUE, TRUE, 270, 150, FALSE, 'Sud-Est', TRUE, FALSE),
+(1, 1, 3, 'Penthouse Terrasse', 'Appartement', 310, 1, 2, 1, 130, 180, FALSE, NULL, NULL, NULL, 'fixe', 'pompe a chaleur', TRUE, TRUE, TRUE, TRUE, 215, 25, TRUE, 'Sud, Ouest', FALSE, TRUE),
+(2, 2, 1, 'Petite Maison de Pêcheur', 'Maison', 90, 1, 1, 2, 50, 65, FALSE, NULL, NULL, NULL, NULL, 'electrique', FALSE, TRUE, FALSE, FALSE, NULL, 12, FALSE, 'Ouest', TRUE, FALSE),
+(3, 3, 2, 'Domaine des Vignes', 'Maison', 360, 3, 4, 2, 220, 2500, TRUE, FALSE, 'creusee', 'sel', 'fixe', 'geothermie', TRUE, TRUE, TRUE, TRUE, 250, 200, TRUE, 'Sud, Est, Ouest', TRUE, TRUE),
+(4, 4, 3, 'Studio Étudiant Calme', 'Appartement', 50, 1, 0, 1, 22, 22, FALSE, NULL, NULL, NULL, NULL, 'collectif', FALSE, FALSE, TRUE, FALSE, NULL, 40, FALSE, 'Nord', FALSE, FALSE),
+(1, 2, 1, 'Maison Contemporaine', 'Maison', 260, 2, 3, 2, 155, 620, TRUE, TRUE, 'creusee', 'chlore', 'fixe', 'pompe a chaleur', TRUE, TRUE, TRUE, TRUE, 225, 45, TRUE, 'Sud-Ouest', FALSE, TRUE),
+(2, 3, 2, 'T3 Lumineux', 'Appartement', 105, 1, 1, 1, 70, 76, FALSE, NULL, NULL, NULL, 'mobile', 'gaz', TRUE, TRUE, TRUE, FALSE, NULL, 18, TRUE, 'Est', TRUE, FALSE),
+(3, 4, 3, 'Gîte de la Forêt', 'Maison', 135, 3, 1, 1, 85, 900, TRUE, FALSE, 'gonflable', 'brome', NULL, 'bois', TRUE, FALSE, TRUE, TRUE, 240, 300, FALSE, 'Sud-Est', TRUE, FALSE),
+(4, 1, 1, 'Appartement Standing', 'Appartement', 165, 2, 2, 1, 98, 108, FALSE, NULL, NULL, NULL, 'fixe', 'electrique', TRUE, TRUE, TRUE, TRUE, 205, 15, TRUE, 'Sud', FALSE, TRUE),
+(1, 3, 2, 'Villa Méditerranée', 'Maison', 390, 2, 4, 2, 210, 1100, TRUE, FALSE, 'creusee', 'sel', 'fixe', 'pompe a chaleur', TRUE, TRUE, TRUE, TRUE, 230, 70, TRUE, 'Sud, Est', TRUE, TRUE),
+(2, 4, 3, 'Maison Mitoyenne Jardin', 'Maison', 125, 2, 1, 2, 82, 180, TRUE, FALSE, 'semi-enteree', 'chlore', 'mobile', 'gaz', TRUE, TRUE, TRUE, FALSE, NULL, 22, FALSE, 'Ouest', TRUE, FALSE),
+(3, 1, 1, 'T1 Bis Mezzanine', 'Appartement', 75, 1, 1, 2, 38, 38, FALSE, NULL, NULL, NULL, NULL, 'electrique', FALSE, TRUE, TRUE, FALSE, NULL, 10, FALSE, 'Nord-Est', FALSE, FALSE),
+(4, 2, 2, 'Mas Provençal', 'Maison', 340, 4, 3, 2, 200, 1800, TRUE, TRUE, 'creusee', 'brome', 'fixe', 'fioul', TRUE, TRUE, TRUE, TRUE, 245, 120, TRUE, 'Sud', TRUE, FALSE),
+(1, 4, 3, 'Appartement Rez-de-Jardin', 'Appartement', 115, 0, 2, 1, 74, 130, FALSE, NULL, NULL, NULL, 'fixe', 'collectif', TRUE, TRUE, TRUE, TRUE, 200, 35, FALSE, 'Sud-Ouest', TRUE, TRUE),
+(2, 1, 1, 'Belle Demeure Familiale', 'Maison', 275, 3, 3, 3, 190, 750, TRUE, FALSE, 'creusee', 'chlore', 'fixe', 'geothermie', TRUE, TRUE, TRUE, TRUE, 235, 55, TRUE, 'Sud-Est, Sud-Ouest', FALSE, TRUE);
 
 -- 4. Activités et Héritage
 INSERT INTO activite (id, id_secteur, id_adresse, nom, description, telephone, horaires) VALUES
