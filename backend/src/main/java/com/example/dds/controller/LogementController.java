@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+
 @Controller
 public class LogementController {
 
@@ -43,7 +45,20 @@ public class LogementController {
 
     @GetMapping("/logement")
     public String logement(Model model) {
-        model.addAttribute("logements", logementService.getLogements());
+        return logementPage(model, 1);
+    }
+
+    @GetMapping("/logement/page/{pageNum}")
+    public String logementPage(Model model, @PathVariable int pageNum) {
+        if (pageNum < 1) {
+            return "redirect:/logement"; // évite le plantage sur /logement/page/0
+        }
+
+        Page<Logement> page = logementService.getLogements(pageNum);
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("logements", page.getContent());
         return "logement";
     }
 
