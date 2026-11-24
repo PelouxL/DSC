@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logements – AlloFraicheur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-[#E3F0E1] font-sans text-slate-800">
+
+    <header class="sticky top-0 z-10 border-b border-emerald-100 bg-white/80 backdrop-blur">
+        <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3">
+            <a th:href="@{/}" class="flex items-center gap-2 text-xl font-bold text-emerald-700">
+                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-600 text-white">❄</span>
+                AlloFraicheur
+            </a>
+            <ul class="flex flex-wrap items-center gap-1 text-sm font-medium text-slate-700">
+                <li><a th:href="@{/}"
+                        class="rounded-full px-4 py-2 transition hover:bg-emerald-50 hover:text-emerald-700">Accueil</a>
+                </li>
+                <li><a th:href="@{/info}"
+                        class="rounded-full px-4 py-2 transition hover:bg-emerald-50 hover:text-emerald-700">À
+                        propos</a></li>
+                <li><a th:href="@{/logement}"
+                        class="rounded-full px-4 py-2 transition hover:bg-emerald-50 hover:text-emerald-700">Logements</a>
+                </li>
+                <li><a th:href="@{/creeLogement}"
+                        class="rounded-full px-4 py-2 transition hover:bg-emerald-50 hover:text-emerald-700">Ajouter un
+                        logement</a></li>
+                <li><a th:href="@{/formConnexion}"
+                        class="rounded-full px-4 py-2 transition hover:bg-emerald-50 hover:text-emerald-700">Se
+                        connecter</a></li>
+                <li><a th:href="@{/inscription}"
+                        class="rounded-full bg-emerald-600 px-4 py-2 text-white transition hover:bg-emerald-700">Inscription</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-4 py-12">
+        <h1 class="mb-8 text-3xl font-extrabold text-emerald-800">Tous les logements</h1>
+
+        <p th:if="${#lists.isEmpty(logements)}" class="text-slate-500">Aucun logement pour le moment.</p>
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <a th:each="l : ${logements}" th:href="@{/logement/{id}(id=${l.id})}"
+                class="group block max-w-sm overflow-hidden rounded-lg bg-white shadow transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+
+                <div class="relative h-40 bg-gradient-to-r from-amber-200 to-rose-200">
+                    <div class="absolute inset-0 flex items-end bg-gradient-to-t from-black/40 p-3">
+                        <span class="font-semibold text-white" th:text="|${l.montantParNuit} € / nuit|">Prix</span>
+                    </div>
+                </div>
+
+                <div class="p-4">
+                    <h3 class="font-semibold transition group-hover:text-emerald-700" th:text="${l.type}">Type</h3>
+                    <p th:if="${l.adresse != null}" class="text-sm text-slate-500"
+                        th:text="|${l.adresse.numero} ${l.adresse.voie}, ${l.adresse.ville}|">Adresse</p>
+                    <p class="mt-2 text-sm text-slate-500"
+                        th:text="|${l.nbLitSimple} lit(s) simple(s) · ${l.nbLitDouble} lit(s) double(s)|">Lits</p>
+                </div>
+            </a>
+        </div>
+
+        <nav th:if="${totalPages > 1}" class="mt-10 flex flex-wrap items-center justify-between gap-2">
+    <a th:if="${currentPage > 1}" th:href="@{/logement/page/{n}(n=${currentPage - 1})}"
+        class="rounded-full bg-emerald-600 px-5 py-2 text-sm font-medium text-white hover:bg-emerald-700">Précédent</a>
+    <span th:unless="${currentPage > 1}"
+        class="rounded-full bg-slate-200 px-5 py-2 text-sm font-medium text-slate-400">Précédent</span>
+
+    <!-- Numéros de page de 1 à totalPages -->
+    <div class="flex flex-wrap items-center gap-1">
+        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+            <a th:if="${currentPage != i}" th:href="@{/logement/page/{n}(n=${i})}" th:text="${i}"
+                class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-medium text-slate-700 shadow-sm hover:bg-emerald-50 hover:text-emerald-700">
+                1
+            </a>
+            <span th:unless="${currentPage != i}" th:text="${i}"
+                class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-600 text-sm font-semibold text-white shadow-sm">
+                1
+            </span>
+        </span>
+    </div>
+
+    <!-- Suivant + Dernière page -->
+    <div class="flex items-center gap-2">
+        <a th:if="${currentPage < totalPages}" th:href="@{/logement/page/{n}(n=${currentPage + 1})}"
+            class="rounded-full bg-emerald-600 px-5 py-2 text-sm font-medium text-white hover:bg-emerald-700">Suivant</a>
+        <span th:unless="${currentPage < totalPages}"
+            class="rounded-full bg-slate-200 px-5 py-2 text-sm font-medium text-slate-400">Suivant</span>
+
+        <a th:if="${currentPage < totalPages}" th:href="@{/logement/page/{n}(n=${totalPages})}"
+            class="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700">Dernière</a>
+        <span th:unless="${currentPage < totalPages}"
+            class="rounded-full bg-slate-200 px-4 py-2 text-sm font-medium text-slate-400">Dernière</span>
+    </div>
+</nav>
+    </main>
+</body>
+
+</html>

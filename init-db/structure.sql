@@ -1,14 +1,13 @@
-
 CREATE TABLE adresse (
     id INT AUTO_INCREMENT PRIMARY KEY,
     numero INT NOT NULL,
     voie VARCHAR(255) NOT NULL,
-    code_postal VARCHAR(255) NOT NULL,
+    code_postal VARCHAR(10) NOT NULL,
     ville VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE secteur (
-    id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(255) NOT NULL
 );
 
@@ -17,56 +16,39 @@ CREATE TABLE adherent (
     adresse_id INT NOT NULL,
     prenom VARCHAR(255) NOT NULL,
     nom VARCHAR(255) NOT NULL,
-    telephone VARCHAR(255) UNIQUE NOT NULL,
+    telephone VARCHAR(20) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     mdp VARCHAR(255) NOT NULL,
-    note DECIMAL(3,1),
+    note DECIMAL(3,1) CHECK (note >= 0 AND note <= 5),
     FOREIGN KEY (adresse_id) REFERENCES adresse(id)
 );
 
 CREATE TABLE logement (
-    id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     proprietaire_id INT NOT NULL,
     adresse_id INT NOT NULL,
     secteur_id INT NOT NULL,
     type VARCHAR(255) NOT NULL,
-    montant_par_nuit INT NOT NULL,
-    nb_lit_simple INT NOT NULL,
-    nb_lit_double INT NOT NULL,
-    garage BOOLEAN,
-    piscine BOOLEAN,
-    climatisation BOOLEAN,
-    chauffage BOOLEAN,
-    balcon BOOLEAN,
+    montant_par_nuit INT NOT NULL CHECK (montant_par_nuit > 0),
+    nb_lit_simple INT NOT NULL DEFAULT 0 CHECK (nb_lit_simple >= 0),
+    nb_lit_double INT NOT NULL DEFAULT 0 CHECK (nb_lit_double >= 0),
+    garage BOOLEAN DEFAULT FALSE,
+    piscine BOOLEAN DEFAULT FALSE,
+    climatisation BOOLEAN DEFAULT FALSE,
+    chauffage BOOLEAN DEFAULT FALSE,
+    balcon BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (proprietaire_id) REFERENCES adherent(id),
     FOREIGN KEY (adresse_id) REFERENCES adresse(id),
     FOREIGN KEY (secteur_id) REFERENCES secteur(id)
 );
 
-CREATE TABLE location (
-    id INT PRIMARY KEY,
-    id_logement INT NOT NULL,
-    id_locataire INT NOT NULL,
-    date_debut DATE NOT NULL,
-    date_fin DATE NOT NULL,
-    FOREIGN KEY (id_logement) REFERENCES logement(id),
-    FOREIGN KEY (id_locataire) REFERENCES adherent(id)
-);
-
-CREATE TABLE facture (
-    id INT PRIMARY KEY,
-    id_location INT NOT NULL,
-    montant INT NOT NULL,
-    FOREIGN KEY (id_location) REFERENCES location(id)
-);
-
 CREATE TABLE activite (
-    id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     id_secteur INT NOT NULL,
     id_adresse INT NOT NULL,
     nom VARCHAR(255) NOT NULL,
     description VARCHAR(255),
-    telephone VARCHAR(255) UNIQUE,
+    telephone VARCHAR(20) UNIQUE,
     horaires VARCHAR(255),
     FOREIGN KEY (id_secteur) REFERENCES secteur(id),
     FOREIGN KEY (id_adresse) REFERENCES adresse(id)
@@ -79,10 +61,10 @@ CREATE TABLE sport (
 
 CREATE TABLE parc (
     id INT PRIMARY KEY,
-    parc_enfant BOOLEAN,
-    dispositif_sportif BOOLEAN,
-    animaux_autorises BOOLEAN,
-    point_d_eau BOOLEAN,
+    parc_enfant BOOLEAN DEFAULT FALSE,
+    dispositif_sportif BOOLEAN DEFAULT FALSE,
+    animaux_autorises BOOLEAN DEFAULT FALSE,
+    point_d_eau BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id) REFERENCES activite(id)
 );
 
@@ -97,7 +79,8 @@ CREATE TABLE evenement (
     type VARCHAR(255) NOT NULL,
     date_debut DATE NOT NULL,
     date_fin DATE NOT NULL,
-    prix INT NOT NULL,
+    prix INT NOT NULL CHECK (prix >= 0),
+    CHECK (date_fin >= date_debut),
     FOREIGN KEY (id) REFERENCES activite(id)
 );
 
@@ -114,43 +97,64 @@ INSERT INTO secteur (id, nom) VALUES
 (2, 'Centre-Bourg'),
 (3, 'Front de mer');
 
--- 2. Tables avec dépendances de niveau 1
-INSERT INTO adherent (id, adresse_id, prenom, nom, telephone, note) VALUES
-(1, 1, 'Jean', 'Dupont', '0601020304', 4.5),
-(2, 2, 'Marie', 'Curie', '0605060708', 4.8),
-(3, 3, 'Paul', 'Martin', '0609101112', 3.9),
-(4, 4, 'Sophie', 'Durand', '0613141516', 5.0);
+-- 2. Adhérents
+INSERT INTO adherent (id, adresse_id, prenom, nom, telephone, email, mdp, note) VALUES
+(1, 1, 'Jean', 'Dupont', '0601020304', 'jean.dupont@exemple.fr', 'mdp_hash_1', 4.5),
+(2, 2, 'Marie', 'Curie', '0605060708', 'marie.curie@exemple.fr', 'mdp_hash_2', 4.8),
+(3, 3, 'Paul', 'Martin', '0609101112', 'paul.martin@exemple.fr', 'mdp_hash_3', 3.9),
+(4, 4, 'Sophie', 'Durand', '0613141516', 'sophie.durand@exemple.fr', 'mdp_hash_4', 5.0);
 
--- 3. Tables avec dépendances multiples
+-- 3. Logements (3 initiaux + 30 ajoutés)
 INSERT INTO logement (id, proprietaire_id, adresse_id, secteur_id, type, montant_par_nuit, nb_lit_simple, nb_lit_double, garage, piscine, climatisation, chauffage, balcon) VALUES
 (1, 1, 1, 1, 'Appartement', 80, 0, 1, FALSE, FALSE, TRUE, TRUE, TRUE),
 (2, 2, 2, 2, 'Maison', 150, 2, 2, TRUE, FALSE, TRUE, TRUE, FALSE),
-(3, 3, 3, 3, 'Villa', 300, 2, 3, TRUE, TRUE, TRUE, TRUE, TRUE);
+(3, 3, 3, 3, 'Villa', 300, 2, 3, TRUE, TRUE, TRUE, TRUE, TRUE),
+(4, 4, 4, 1, 'Appartement', 95, 1, 1, FALSE, FALSE, TRUE, TRUE, TRUE),
+(5, 1, 5, 3, 'Maison', 180, 2, 2, TRUE, FALSE, FALSE, TRUE, TRUE),
+(6, 2, 1, 1, 'Studio', 65, 0, 1, FALSE, FALSE, TRUE, TRUE, FALSE),
+(7, 3, 2, 2, 'Villa', 340, 3, 3, TRUE, TRUE, TRUE, TRUE, TRUE),
+(8, 4, 3, 3, 'Appartement', 110, 2, 1, FALSE, FALSE, TRUE, TRUE, TRUE),
+(9, 1, 4, 1, 'Maison', 165, 1, 2, TRUE, FALSE, TRUE, TRUE, FALSE),
+(10, 2, 5, 3, 'Villa', 290, 2, 2, TRUE, TRUE, FALSE, TRUE, TRUE),
+(11, 3, 1, 1, 'Studio', 70, 2, 0, FALSE, FALSE, FALSE, TRUE, FALSE),
+(12, 4, 2, 2, 'Appartement', 90, 1, 1, FALSE, FALSE, TRUE, TRUE, FALSE),
+(13, 1, 3, 3, 'Maison', 210, 2, 3, TRUE, FALSE, TRUE, TRUE, TRUE),
+(14, 2, 4, 1, 'Appartement', 105, 0, 2, FALSE, FALSE, TRUE, TRUE, TRUE),
+(15, 3, 5, 3, 'Villa', 380, 4, 3, TRUE, TRUE, TRUE, TRUE, TRUE),
+(16, 4, 1, 1, 'Studio', 60, 1, 0, FALSE, FALSE, FALSE, TRUE, FALSE),
+(17, 1, 2, 2, 'Maison', 145, 3, 1, TRUE, FALSE, FALSE, TRUE, FALSE),
+(18, 2, 3, 3, 'Appartement', 125, 1, 2, TRUE, FALSE, TRUE, TRUE, TRUE),
+(19, 3, 4, 1, 'Appartement', 85, 2, 0, FALSE, FALSE, TRUE, TRUE, FALSE),
+(20, 4, 5, 3, 'Maison', 225, 1, 3, TRUE, TRUE, TRUE, TRUE, TRUE),
+(21, 1, 1, 1, 'Studio', 75, 0, 1, FALSE, FALSE, TRUE, TRUE, FALSE),
+(22, 2, 2, 2, 'Villa', 275, 2, 2, TRUE, TRUE, TRUE, TRUE, FALSE),
+(23, 3, 3, 3, 'Appartement', 130, 2, 1, FALSE, FALSE, TRUE, TRUE, TRUE),
+(24, 4, 4, 1, 'Maison', 155, 2, 2, FALSE, FALSE, TRUE, TRUE, TRUE),
+(25, 1, 5, 3, 'Appartement', 115, 1, 1, TRUE, FALSE, FALSE, TRUE, TRUE),
+(26, 2, 1, 1, 'Villa', 310, 3, 2, TRUE, TRUE, TRUE, TRUE, TRUE),
+(27, 3, 2, 2, 'Studio', 55, 1, 0, FALSE, FALSE, FALSE, TRUE, FALSE),
+(28, 4, 3, 3, 'Maison', 195, 2, 2, TRUE, FALSE, TRUE, TRUE, TRUE),
+(29, 1, 4, 1, 'Appartement', 98, 1, 1, FALSE, FALSE, TRUE, TRUE, FALSE),
+(30, 2, 5, 3, 'Villa', 360, 2, 4, TRUE, TRUE, TRUE, TRUE, TRUE),
+(31, 3, 1, 1, 'Maison', 170, 3, 1, TRUE, FALSE, TRUE, TRUE, FALSE),
+(32, 4, 2, 2, 'Appartement', 88, 0, 1, FALSE, FALSE, FALSE, TRUE, TRUE),
+(33, 1, 3, 3, 'Villa', 325, 2, 3, TRUE, TRUE, TRUE, TRUE, TRUE);
 
--- 4. Location et Facturation
-INSERT INTO location (id, id_logement, id_locataire, date_debut, date_fin) VALUES
-(1, 1, 2, '2026-11-01', '2026-11-05'),
-(2, 3, 4, '2026-12-20', '2026-12-27');
-
-INSERT INTO facture (id, id_location, montant) VALUES
-(1, 1, 320),
-(2, 2, 2100);
-
--- 5. Activités et Héritage
+-- 4. Activités et Héritage
 INSERT INTO activite (id, id_secteur, id_adresse, nom, description, telephone, horaires) VALUES
 (1, 1, 1, 'Club Nautique', 'Location de voiliers et paddle', '0401020304', '08:00 - 20:00'),
 (2, 2, 2, 'Parc Botanique des Dunes', 'Parc ombragé avec vue sur mer', NULL, '06:00 - 22:00'),
 (3, 1, 4, 'Boulangerie du Port', 'Pains et spécialités locales', '0405060708', '07:00 - 19:30'),
 (4, 3, 3, 'Festival de la Mer', 'Concerts en plein air sur la plage', '0409101112', '18:00 - 23:59');
 
-INSERT INTO sport (id) VALUES 
+INSERT INTO sport (id) VALUES
 (1);
 
-INSERT INTO parc (id, parc_enfant, dispositif_sportif, animaux_autorises, point_d_eau) VALUES 
+INSERT INTO parc (id, parc_enfant, dispositif_sportif, animaux_autorises, point_d_eau) VALUES
 (2, TRUE, FALSE, FALSE, TRUE);
 
-INSERT INTO magasin (id, type) VALUES 
+INSERT INTO magasin (id, type) VALUES
 (3, 'Alimentation');
 
-INSERT INTO evenement (id, type, date_debut, date_fin, prix) VALUES 
+INSERT INTO evenement (id, type, date_debut, date_fin, prix) VALUES
 (4, 'Musique', '2026-07-10', '2026-07-15', 25);

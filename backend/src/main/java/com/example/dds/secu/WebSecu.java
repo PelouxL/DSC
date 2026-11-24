@@ -26,8 +26,10 @@ public class WebSecu {
                 // Pages publiques
                 .requestMatchers(
                     mvc.matcher("/"), 
+                    mvc.matcher("/logement/**"),
                     mvc.matcher("/formInscription"), 
-                    mvc.matcher("/formConnexion"), 
+                    mvc.matcher("/formConnexion"),
+                    mvc.matcher("/meteo.js"),  
                     mvc.matcher("/css/**")
                 ).permitAll()
                 .anyRequest().authenticated()
