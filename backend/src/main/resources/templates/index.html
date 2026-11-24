@@ -8,6 +8,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
 <body class="min-h-screen bg-[#E3F0E1] font-sans text-slate-800">
+    <h1 th:text="${titre}">Titre par défaut</h1>
+    <nav class="menu-navigation">
+        <ul>
+            <li><a th:href="@{/}">Accueil</a></li>
+            <li><a th:href="@{/info}">A propos</a></li>
+            <li><a th:href="@{/creeLogement}">Ajouter un logement</a></li>
+            
+            <th:block th:if="${utilisateur != null}">
+                <form th:action="@{/logout}" method="POST" style="display: inline;">
+                    <button type="submit" style="background: none; border: none; color: black; cursor: pointer; font: inherit;">Déconnexion</button>
+                </form>
+            </th:block>
+            <th:block th:if="${utilisateur == null}">
+                <li><a th:href="@{/formInscription}">Inscription</a></li>
+                <li><a th:href="@{/formConnexion}">Se connecter</a></li>
+            </th:block>
+        </ul>
+    </nav>
 
     <header class="sticky top-0 z-10 border-b border-emerald-100 bg-white/80 backdrop-blur">
         <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3">

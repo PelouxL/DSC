@@ -1,0 +1,158 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Logement",
+    "description": "string",
+    "type": "object",
+    "properties": {
+        "id": {
+            "description": "L'identifiant unique du logement",
+            "type": "integer"
+        },
+        "adresse": {
+            "description": "Adresse du logement",
+            "type": "array",
+            "prefixItems": [
+                {
+                    "type": "integer"
+                },
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "integer"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "nom": {
+            "description": "Le nom du logement",
+            "type": "string"
+        },  
+        "type": {
+            "description": "Le type de logement",
+            "type": "string"
+        },
+        "montant_par_nuit": {
+            "description": "Prix par nuit par personne",
+            "type": "integer"
+        },
+        "nb_lits_simples": {
+            "description": "Le nombre de lits simples disponibles",
+            "type": "integer"
+        },
+        "nb_lits_doubles": {
+            "description": "Le nombre de lits doubles disponibles",
+            "type": "integer"
+        },
+        "nb_etages": {
+            "description": "Le nombre d'etages",
+            "type": "integer"
+        },
+        "surface_habitable": {
+            "description": "Surface interieure habitable en metre",
+            "type": "integer"
+        },
+        "surface_totale": {
+            "description": "Surface interieure et exterieure totales en metre",
+            "type": "integer"
+        },
+        "piscine": {
+            "description": "Caracteristiques de la piscine",
+            "type": "array",
+            "prefixItems": [
+                {
+                    "description": "Presence d'une piscine",
+                    "type": "boolean"
+                },
+                {
+                    "description": "Piscine couverte",
+                    "type": "boolean"
+                },
+                {
+                    "description": "Type de piscine",
+                    "enum": [
+                        "creusee",
+                        "semi-enteree",
+                        "gonflable"
+                    ]
+                },
+                {
+                    "description": "Type de nettoyage",
+                    "enum": [
+                        "chlore",
+                        "brome",
+                        "sel"
+                    ]
+                }
+            ]
+        },
+        "climatisation": {
+            "description": "Type de climatisation",
+            "enum": [
+                "fixe",
+                "mobile",
+                null
+            ]
+        },
+        "chauffage": {
+            "description": "Type de chauffage",
+            "enum": [
+                "electrique",
+                "gaz",
+                "fioul",
+                "pompe_a_chaleur",
+                "bois",
+                "collectif",
+                "geothermie",
+                null
+            ]
+        },
+        "salle_de_bain_et_WC_separes": {
+            "description": "Salle de beain et wc separes",
+            "type": "boolean"
+        },
+        "television": {
+            "description": "Presence d'une television",
+            "type": "boolean"
+        },
+        "Wi-Fi": {
+            "description": "Type de connexion wi-fi",
+            "type": "boolean"
+        },
+        "garage": {
+            "description": "Caracteristiques du garage",
+            "type": "array",
+            "prefixItems": [
+                {
+                    "description": "Presence d'un garage",
+                    "type": "boolean"
+                },
+                {
+                    "description": "Hauteur du garage",
+                    "type": "integer"
+                }
+            ]
+        },
+        "distance_route": {
+            "description": "Distance entre l'entree du logement et la route en metre",
+            "type": "integer"
+        },
+        "exposition": {
+            "description": "Exposition au soleil",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "animaux_autorises": {
+            "description": "Animaux domestiques autorises",
+            "type": "boolean"
+        },
+        "aménagement_personne_a_mobilite_reduite": {
+            "description": "Siege montant escaliers, pente pour accéder à l'entrée etc.",
+            "type": "boolean"
+        }
+    }
+}

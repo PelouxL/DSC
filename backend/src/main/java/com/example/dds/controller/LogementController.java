@@ -1,5 +1,8 @@
 package com.example.dds.controller;
 
+import java.util.Map;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.example.dds.service.LlmService;
 import com.example.dds.service.LogementService;
 
@@ -14,7 +17,9 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
-@Controller
+
+
+@Controller 
 public class LogementController {
 
     @Autowired
@@ -34,13 +39,15 @@ public class LogementController {
 
     // Réceptionne les données quand l'utilisateur clique sur "Valider"
     @PostMapping("/ajouter-logement")
-    public String traiterNouveauLogement(@RequestParam("description") String description) {
+    public String traiterNouveauLogement(@RequestParam("description") String description, Model model) {
+        
+        Map<String, Object> logement = llmService.analyserLogementViaPython(description);
 
-        String jsonResultat = llmService.analyserLogementViaPython(description);
+        model.addAttribute("logement", logement);
 
-        System.out.println("Réponse de Flask et de l'IA : " + jsonResultat);
-
-        return "redirect:/";
+        System.out.println("Réponse de Flask et de l'IA : "+logement);
+    
+        return "formLogement";
     }
 
     @GetMapping("/logement")
@@ -73,5 +80,11 @@ public class LogementController {
             m.addAttribute("logement", l);
             return "detail_logement";
         }
+    }
+
+    @PostMapping("/formLogement")
+    public String postMethodName(@RequestBody String entity) {
+        
+        return entity;
     }
 }

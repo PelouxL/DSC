@@ -2,8 +2,6 @@ package com.example.dds.controller;
 
 import java.math.BigDecimal;
 
-import org.hibernate.annotations.Collate;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +18,7 @@ public class Adherent {
     
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Integer id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "adresse_id")
