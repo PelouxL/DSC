@@ -26,12 +26,14 @@
                     </li>
 
                     <!-- Description -->
+                    <!--
                     <li>
                         <label for="description">Description&nbsp;:</label><br>
                         <textarea id="description" name="description" rows="5" cols="100" maxlength="500"
                             placeholder="Description du logement..."
                             th:text="${(logement != null && logement['description'] != null) ? logement['description'] : ''}"></textarea>
                     </li>
+                    -->
 
                     <!-- Adresse -->
                     <li>
@@ -75,15 +77,20 @@
                 <ul>
                     <!-- Type de logement -->
                     <li>
-                        Type de logement&nbsp;:<br>
-
-                        <input type="radio" id="type_appart" name="type_logement" value="Appartement"
-                            th:checked="${logement != null && logement['type']?.toLowerCase() == 'appartement'}" required/>
-                        <label for="type_appart">Appartement</label>
-
-                        <input type="radio" id="type_maison" name="type_logement" value="Maison"
-                            th:checked="${logement != null && logement['type']?.toLowerCase() == 'maison'}" />
-                        <label for="type_maison">Maison</label>
+                        <label for="type_logement">Type de logement&nbsp;:</label>
+                        <select id="type_logement" name="type_logement" required>
+                            <option value="" disabled th:selected="${logement == null || logement['type'] == null}">
+                                -- Choisissez un type --
+                            </option>
+                            <option value="Appartement"
+                                    th:selected="${logement != null && logement['type']?.toLowerCase() == 'appartement'}">
+                                Appartement
+                            </option>
+                            <option value="Maison"
+                                    th:selected="${logement != null && logement['type']?.toLowerCase() == 'maison'}">
+                                Maison
+                            </option>
+                        </select>
                     </li>
 
                     <!-- Nombre d'etages -->
@@ -219,12 +226,12 @@
                         Piscine&nbsp;:<br>
 
                         <input type="radio" id="piscine_oui" name="piscine" value="oui"
-                            onclick="toggleSection('detail_piscine', true)"
+                            onclick="cacherDetails('detail_piscine', true)"
                             th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 0 && logement['piscine'][0] == true}" required/>
                         <label for="piscine_oui">Oui</label>
 
                         <input type="radio" id="piscine_non" name="piscine" value="non"
-                            onclick="toggleSection('detail_piscine', false)"
+                            onclick="cacherDetails('detail_piscine', false)"
                             th:checked="${logement == null || logement['piscine'] == null || #lists.size(logement['piscine']) == 0 || logement['piscine'][0] != true}" />
                         <label for="piscine_non">Non</label>
 
@@ -233,6 +240,7 @@
                             Détails&nbsp;:
                             <ul>
 
+                                <!-- Couverte -->
                                 <li>
                                     Couverte&nbsp;:<br>
 
@@ -245,36 +253,50 @@
                                     <label for="couverte_non">Non</label>
                                 </li>
 
+                                <!-- Type de piscine -->
                                 <li>
-                                    Type&nbsp;:<br>
-
-                                    <input type="radio" id="type_creusee" name="type_piscine" value="Creusee" class="req-piscine"
-                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 2 && logement['piscine'][2]?.toLowerCase() == 'creusee'}"/>
-                                    <label for="type_creusee">Creusée</label>
-
-                                    <input type="radio" id="type_semi_enteree" name="type_piscine" value="Semi-enteree"
-                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 2 && logement['piscine'][2]?.toLowerCase() == 'semi-enteree'}"/>
-                                    <label for="type_semi_enteree">Semi-enterrée</label>
-
-                                    <input type="radio" id="type_gonflable" name="type_piscine" value="Gonflable"
-                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 2 && logement['piscine'][2]?.toLowerCase() == 'gonflable'}"/>
-                                    <label for="type_gonflable">Gonflable</label>
+                                    <label for="type_piscine">Type&nbsp;:</label>
+                                    <select id="type_piscine" name="type_piscine" class="req-piscine">
+                                        <option value="" disabled
+                                                th:selected="${logement == null || logement['piscine'] == null || #lists.size(logement['piscine']) <= 2 || logement['piscine'][2] == null}">
+                                            -- Choisissez un type --
+                                        </option>
+                                        <option value="Creusee"
+                                                th:selected="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 2 && logement['piscine'][2]?.toLowerCase() == 'creusee'}">
+                                            Creusée
+                                        </option>
+                                        <option value="Semi-enteree"
+                                                th:selected="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 2 && logement['piscine'][2]?.toLowerCase() == 'semi-enteree'}">
+                                            Semi-enterrée
+                                        </option>
+                                        <option value="Gonflable"
+                                                th:selected="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 2 && logement['piscine'][2]?.toLowerCase() == 'gonflable'}">
+                                            Gonflable
+                                        </option>
+                                    </select>
                                 </li>
 
+                                <!-- Nettoyage -->
                                 <li>
-                                    Nettoyage&nbsp;:<br>
-
-                                    <input type="radio" id="nettoyage_chlore" name="nettoyage" value="Chlore" class="req-piscine"
-                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 3 && logement['piscine'][3]?.toLowerCase() == 'chlore'}"/>
-                                    <label for="nettoyage_chlore">Chlore</label>
-
-                                    <input type="radio" id="nettoyage_brome" name="nettoyage" value="Brome"
-                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 3 && logement['piscine'][3]?.toLowerCase() == 'brome'}"/>
-                                    <label for="nettoyage_brome">Brome</label>
-
-                                    <input type="radio" id="nettoyage_sel" name="nettoyage" value="Sel"
-                                        th:checked="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 3 && logement['piscine'][3]?.toLowerCase() == 'sel'}"/>
-                                    <label for="nettoyage_sel">Sel</label>
+                                    <label for="nettoyage">Nettoyage&nbsp;:</label>
+                                    <select id="nettoyage" name="nettoyage" class="req-piscine">
+                                        <option value="" disabled
+                                                th:selected="${logement == null || logement['piscine'] == null || #lists.size(logement['piscine']) <= 3 || logement['piscine'][3] == null}">
+                                            -- Choisissez un nettoyage --
+                                        </option>
+                                        <option value="Chlore"
+                                                th:selected="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 3 && logement['piscine'][3]?.toLowerCase() == 'chlore'}">
+                                            Chlore
+                                        </option>
+                                        <option value="Brome"
+                                                th:selected="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 3 && logement['piscine'][3]?.toLowerCase() == 'brome'}">
+                                            Brome
+                                        </option>
+                                        <option value="Sel"
+                                                th:selected="${logement != null && logement['piscine'] != null && #lists.size(logement['piscine']) > 3 && logement['piscine'][3]?.toLowerCase() == 'sel'}">
+                                            Sel
+                                        </option>
+                                    </select>
                                 </li>
 
                             </ul>
@@ -284,56 +306,58 @@
 
                     <!-- Climatisation -->
                     <li>
-                        Climatisation&nbsp;:<br>
-
-                        <input type="radio" id="clim_aucune" name="clim" value="Aucune"
-                            th:checked="${logement == null || logement['climatisation'] == null}" required/>
-                        <label for="clim_aucune">Aucune</label>
-
-                        <input type="radio" id="clim_fixe" name="clim" value="Fixe"
-                            th:checked="${logement != null && logement['climatisation']?.toLowerCase() == 'fixe'}"/>
-                        <label for="clim_fixe">Fixe</label>
-
-                        <input type="radio" id="clim_mobile" name="clim" value="Mobile"
-                            th:checked="${logement != null && logement['climatisation']?.toLowerCase() == 'mobile'}"/>
-                        <label for="clim_mobile">Mobile</label>
+                        <label for="climatisation">Climatisation&nbsp;:</label>
+                        <select id="climatisation" name="climatisation" required>
+                            <option value="" disabled th:selected="${logement == null || logement['climatisation'] == null}">
+                                -- Choisissez un type --
+                            </option>
+                            <option value="Fixe"
+                                    th:selected="${logement != null && logement['climatisation'] == 'fixe'}">
+                                Fixe
+                            </option>
+                            <option value="Mobile"
+                                    th:selected="${logement != null && logement['climatisation'] == 'mobile'}">
+                                Mobile
+                            </option>
+                        </select>
                     </li>
 
                     <!-- Chauffage -->
                     <li>
-                        Chauffage&nbsp;:<br>
-
-                        <input type="radio" id="chauffage_aucun" name="chauffage" value="Aucun"
-                            th:checked="${logement == null || logement['chauffage'] == null}" required/>
-                        <label for="chauffage_aucun">Aucun</label>
-
-                        <input type="radio" id="chauffage_electrique" name="chauffage" value="Electrique"
-                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'electrique'}"/>
-                        <label for="chauffage_electrique">Electrique</label>
-
-                        <input type="radio" id="chauffage_gaz" name="chauffage" value="Gaz"
-                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'gaz'}"/>
-                        <label for="chauffage_gaz">Gaz</label>
-
-                        <input type="radio" id="chauffage_fioul" name="chauffage" value="Fioul"
-                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'fioul'}"/>
-                        <label for="chauffage_fioul">Fioul</label>
-
-                        <input type="radio" id="chauffage_pompe_a_chaleur" name="chauffage" value="Pompe_a_chaleur"
-                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'pompe_a_chaleur'}"/>
-                        <label for="chauffage_pompe_a_chaleur">Pompe à chaleur</label>
-
-                        <input type="radio" id="chauffage_bois" name="chauffage" value="Bois"
-                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'bois'}"/>
-                        <label for="chauffage_bois">Bois</label>
-
-                        <input type="radio" id="chauffage_collectif" name="chauffage" value="Collectif"
-                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'collectif'}"/>
-                        <label for="chauffage_collectif">Collectif</label>
-
-                        <input type="radio" id="chauffage_geothermie" name="chauffage" value="Geothermie"
-                            th:checked="${logement != null && logement['chauffage']?.toLowerCase() == 'geothermie'}"/>
-                        <label for="chauffage_geothermie">Géothermie</label>
+                        <label for="chauffage">Chauffage&nbsp;:</label>
+                        <select id="chauffage" name="chauffage" required>
+                            <option value="" disabled th:selected="${logement == null || logement['chauffage'] == null}">
+                                -- Choisissez un type --
+                            </option>
+                            <option value="electrique"
+                                    th:selected="${logement != null && logement['chauffage'] == 'electrique'}">
+                                Electrique
+                            </option>
+                            <option value="gaz"
+                                    th:selected="${logement != null && logement['chauffage'] == 'gaz'}">
+                                Gaz
+                            </option>
+                            <option value="fioul"
+                                    th:selected="${logement != null && logement['chauffage'] == 'fioul'}">
+                                Fioul
+                            </option>
+                            <option value="pompe_a_chaleur"
+                                    th:selected="${logement != null && logement['chauffage'] == 'pompe_a_chaleur'}">
+                                Pompe à chaleur
+                            </option>
+                            <option value="bois"
+                                    th:selected="${logement != null && logement['chauffage'] == 'bois'}">
+                                Bois
+                            </option>
+                            <option value="collectif"
+                                    th:selected="${logement != null && logement['chauffage'] == 'collectif'}">
+                                Collectif
+                            </option>
+                            <option value="geothermie"
+                                    th:selected="${logement != null && logement['chauffage'] == 'geothermie'}">
+                                Géothermie
+                            </option>
+                        </select>
                     </li>
 
                     <!-- Television -->
@@ -367,12 +391,12 @@
                         Garage&nbsp;:<br>
 
                         <input type="radio" id="garage_oui" name="garage" value="oui"
-                            onclick="toggleSection('detail_garage', true)"
+                            onclick="cacherDetails('detail_garage', true)"
                             th:checked="${logement != null && logement['garage'] != null && #lists.size(logement['garage']) > 0 && logement['garage'][0] == true}" required/>
                         <label for="garage_oui">Oui</label>
 
                         <input type="radio" id="garage_non" name="garage" value="non"
-                            onclick="toggleSection('detail_garage', false)"
+                            onclick="cacherDetails('detail_garage', false)"
                             th:checked="${logement == null || logement['garage'] == null || #lists.size(logement['garage']) == 0 || logement['garage'][0] != true}" />
                         <label for="garage_non">Non</label>
 
@@ -399,7 +423,6 @@
                 const bloc = document.getElementById(id);
                 bloc.style.display = afficher ? 'block' : 'none';
 
-                /* jsp si c utile */
                 const champs = bloc.querySelectorAll('input');
                 champs.forEach(champ => {
                     if (champ.type === 'number' || champ.classList.contains('req-piscine')) {

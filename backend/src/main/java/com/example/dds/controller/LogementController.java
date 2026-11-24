@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller 
 public class LogementController {
@@ -34,4 +36,11 @@ public class LogementController {
     
         return "formLogement";
     }
+
+    @PostMapping("/formLogement")
+    public String postMethodName(@RequestBody String entity) {
+        
+        return entity;
+    }
+    
 }
